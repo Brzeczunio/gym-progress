@@ -1,0 +1,40 @@
+GYM PROGRESS — PUBLIKACJA NA GITHUB PAGES
+
+1. Wejdź na github.com i utwórz nowe PUBLICZNE repozytorium, np.:
+   gym-progress
+
+2. Rozpakuj tę paczkę na komputerze.
+
+3. W repozytorium wybierz:
+   Add file -> Upload files
+
+4. Wgraj DO GŁÓWNEGO KATALOGU repozytorium:
+   - index.html
+   - manifest.webmanifest
+   - sw.js
+   - icon.svg
+   - .nojekyll
+   - README.txt
+   (plik gym-progress-standalone.html jest opcjonalny)
+
+5. Kliknij Commit changes.
+
+6. Wejdź:
+   Settings -> Pages
+
+7. W sekcji Build and deployment ustaw:
+   Source: Deploy from a branch
+   Branch: main
+   Folder: /(root)
+   Następnie Save.
+
+8. Po chwili GitHub pokaże adres aplikacji, zwykle:
+   https://TWOJ_LOGIN.github.io/gym-progress/
+
+9. Otwórz ten adres w Chrome na Androidzie.
+   W menu Chrome wybierz:
+   "Zainstaluj aplikację" lub "Dodaj do ekranu głównego".
+
+WAŻNE:
+Dane treningowe są przechowywane lokalnie w przeglądarce telefonu.
+W aplikacji regularnie używaj opcji eksportu JSON jako kopii zapasowej.
