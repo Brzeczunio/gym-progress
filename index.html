@@ -41,7 +41,7 @@
     .seg button.active{background:var(--accent);color:#08111f;border-color:var(--accent)}
     .exercise{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#0b192b}
     .exercise-top{display:grid;grid-template-columns:156px minmax(0,1fr);gap:14px;align-items:start}
-    .ex-graphic{width:156px;height:156px;border-radius:14px;background:#07172b;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;flex-shrink:0;padding:4px}
+    .ex-graphic{width:156px;height:156px;border-radius:14px;background:#07172b;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;flex-shrink:0;padding:8px}
     .ex-title{font-weight:800;font-size:14px;line-height:1.24;word-break:break-word;overflow-wrap:anywhere;max-width:100%}.ex-meta{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.4}
     .set-grid{display:grid;grid-template-columns:42px 1fr 1fr 1fr;gap:8px;align-items:center;margin-top:10px}
     .set-grid.head{font-size:11px;color:var(--muted);margin-top:8px}
@@ -71,7 +71,7 @@
     .grid4{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:8px}
     .install{display:none}
 
-    .ex-graphic img{width:100%;height:100%;object-fit:contain;display:block}
+    .ex-graphic img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
     .zoom-hint{font-size:10px;color:var(--muted);margin-top:4px}.last-fill{margin-top:8px;font-size:11px;color:#cde1ff}
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
     .modal.active{display:flex}
@@ -83,8 +83,8 @@
     .library-grid{display:grid;grid-template-columns:1fr;gap:9px;max-height:62vh;overflow:auto;padding-right:2px}
     .library-item{border:1px solid var(--line);border-radius:14px;padding:10px;background:#0b192b}
     .library-item-top{display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:start}
-    .library-img{width:112px;height:112px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#07172b;padding:4px;display:grid;place-items:center}
-    .library-img img{width:100%;height:100%;object-fit:contain;display:block}
+    .library-img{width:112px;height:112px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#07172b;padding:7px;display:grid;place-items:center}
+    .library-img img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
     .tag{display:inline-block;padding:3px 7px;border-radius:999px;background:#173151;color:#dbeaff;font-size:10px;margin:2px 3px 2px 0}
     .modal-panel{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:14px;width:min(760px,100%);max-height:90vh;overflow:hidden;box-shadow:var(--shadow)}
     .modal-panel h3{margin:0 0 10px}
@@ -95,9 +95,8 @@
       .library-img{width:88px;height:88px}
       .exercise-top{grid-template-columns:1fr}
       .editor-preview{grid-template-columns:1fr}
-      .editor-item .ex-graphic{width:100% !important;height:190px !important}
-      .ex-graphic{width:100%;height:190px}
-      .ex-graphic{width:100%;height:130px}
+      .editor-item .ex-graphic{width:100% !important;height:176px !important}
+      .ex-graphic{width:100%;height:176px;padding:10px}
       .grid4,.grid3,.grid2{grid-template-columns:1fr}
       .kpi{grid-template-columns:1fr 1fr}
     }
@@ -257,7 +256,7 @@
       
       <div class="card">
         <h3>Wersja aplikacji</h3>
-        <div class="small"><b>Gym Progress v20</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
+        <div class="small"><b>Gym Progress v21</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
       </div>
 
       <div class="footer-note">To narzędzie do logowania treningu, nie diagnoza ani zastępstwo konsultacji medycznej.</div>
