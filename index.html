@@ -40,8 +40,8 @@
     .seg button{padding:11px;border-radius:12px;border:1px solid var(--line);background:#0e1c2e;color:var(--muted);font-weight:800;cursor:pointer}
     .seg button.active{background:var(--accent);color:#08111f;border-color:var(--accent)}
     .exercise{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#0b192b}
-    .exercise-top{display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:start}
-    .ex-graphic{width:112px;height:112px;border-radius:14px;background:#091525;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+    .exercise-top{display:grid;grid-template-columns:minmax(220px,42%) 1fr;gap:14px;align-items:start}
+    .ex-graphic{width:100%;aspect-ratio:4/3;min-height:180px;border-radius:14px;background:#f3f3f3;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
     .ex-title{font-weight:800;font-size:16px}.ex-meta{color:var(--muted);font-size:12px;margin-top:4px}
     .set-grid{display:grid;grid-template-columns:42px 1fr 1fr 1fr;gap:8px;align-items:center;margin-top:10px}
     .set-grid.head{font-size:11px;color:var(--muted);margin-top:8px}
@@ -70,6 +70,7 @@
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
     .grid4{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:8px}
     .install{display:none}
+    .clear-reps{padding:7px 10px;font-size:11px;white-space:nowrap;margin-top:9px}
 
     .ex-graphic img{width:100%;height:100%;object-fit:contain;display:block;background:#091525}
     .zoom-hint{font-size:10px;color:var(--muted);margin-top:4px}
@@ -80,7 +81,7 @@
     .modal-close{margin-top:10px;width:100%}
     @media (max-width:580px){
       .exercise-top{grid-template-columns:1fr}
-      .ex-graphic{width:100%;height:130px}
+      .ex-graphic{width:100%;height:auto;min-height:220px}
       .grid4,.grid3,.grid2{grid-template-columns:1fr}
       .kpi{grid-template-columns:1fr 1fr}
     }
@@ -277,14 +278,15 @@ const DEFAULT_PLAN = {
 
 
 const EXERCISE_IMAGES = {
-  A1:'eximg/A1.png', A2:'eximg/A2.png', A3:'eximg/A3.png', A4:'eximg/A4.png', A5:'eximg/A5.png', A6:'eximg/A6.png', A7:'eximg/A7.png',
-  B1:'eximg/B1.png', B2:'eximg/B2.png', B3:'eximg/B3.png', B4:'eximg/B4.png', B5:'eximg/B5.png', B6:'eximg/B6.png', B7:'eximg/B7.png', B8:'eximg/B8.png',
-  C1:'eximg/C1.png', C2:'eximg/C2.png', C3:'eximg/C3.png', C4:'eximg/C4.png', C5:'eximg/C5.png', C6:'eximg/C6.png', C7:'eximg/C7.png', C8:'eximg/C8.png'
+  A1:'eximg/A1.webp', A2:'eximg/A2.webp', A3:'eximg/A3.webp', A4:'eximg/A4.webp', A5:'eximg/A5.webp', A6:'eximg/A6.webp', A7:'eximg/A7.webp',
+  B1:'eximg/B1.webp', B2:'eximg/B2.webp', B3:'eximg/B3.webp', B4:'eximg/B4.webp', B5:'eximg/B5.webp', B6:'eximg/B6.webp', B7:'eximg/B7.webp', B8:'eximg/B8.webp',
+  C1:'eximg/C1.webp', C2:'eximg/C2.webp', C3:'eximg/C3.webp', C4:'eximg/C4.webp', C5:'eximg/C5.webp', C6:'eximg/C6.webp', C7:'eximg/C7.webp', C8:'eximg/C8.webp'
 };
 function exerciseGraphicHTML(ex){
   const src = EXERCISE_IMAGES[ex.id];
   if(src){
-    return `<img src="${src}" alt="${ex.name}" data-zoom="${src}">`;
+    const versionedSrc = `${src}?v=5`;
+    return `<img src="${versionedSrc}" alt="${ex.name}" data-zoom="${versionedSrc}">`;
   }
   return graphicSVG(ex.category);
 }
@@ -365,7 +367,11 @@ function renderWorkout(){
     const last=getLastExercise(ex.id);
     const dkey=selectedDay+'_'+ex.id;
     if(!draft[dkey]){
-      draft[dkey]={weight:last?.ex?.weight ?? '', reps:Array(ex.sets).fill('').map((_,i)=>last?.ex?.reps?.[i] ?? ''), rir:Array(ex.sets).fill(2)};
+      draft[dkey]={
+        weight:last?.ex?.weight ?? '',
+        reps:Array(ex.sets).fill('').map((_,i)=>last?.ex?.reps?.[i] ?? ''),
+        rir:Array(ex.sets).fill(2)
+      };
     } else {
       // match current number of sets after edit
       draft[dkey].reps = Array(ex.sets).fill('').map((_,i)=>draft[dkey].reps[i] ?? '');
@@ -386,7 +392,7 @@ function renderWorkout(){
     wrap.innerHTML = `<div class="exercise-top">
         <div class="ex-graphic">${exerciseGraphicHTML(ex)}</div>
         <div><div class="ex-title">${idx+1}. ${ex.name}</div><div class="ex-meta">${ex.sets} × ${ex.min}–${ex.max} • ${ex.note}</div><div class="zoom-hint">Stuknij obrazek, aby powiększyć.</div>
-        <div class="tiny" style="margin-top:7px">${lastTxt}</div></div>
+        <div class="tiny" style="margin-top:7px">${lastTxt}</div><button type="button" class="btn ghost clear-reps" data-clear-reps="${dkey}">Wyczyść powtórzenia</button></div>
       </div>
       <div class="set-grid head"><div>Seria</div><div>kg</div><div>Powt.</div><div>RIR</div></div>${rows}
       <div id="status_${dkey}" class="status warn">Wpisz serie, aby zobaczyć sugestię progresji.</div>`;
@@ -405,6 +411,16 @@ function renderWorkout(){
       }
       const exId=id.split('_').slice(1).join('_');
       const ex=currentPlan()[selectedDay].find(x=>x.id===exId); updateStatus(ex,id);
+    });
+  });
+  box.querySelectorAll('[data-clear-reps]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.clearReps;
+      const exId=id.split('_').slice(1).join('_');
+      const ex=currentPlan()[selectedDay].find(x=>x.id===exId);
+      draft[id].reps=Array(ex.sets).fill('');
+      box.querySelectorAll(`input[data-role="reps"][data-id="${id}"]`).forEach(input=>{ input.value=''; });
+      updateStatus(ex,id);
     });
   });
 }
