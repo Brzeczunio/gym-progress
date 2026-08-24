@@ -66,6 +66,8 @@
     .note{border-left:4px solid var(--accent);padding:8px 10px;background:#0b192b;border-radius:8px}
     .footer-note{font-size:11px;color:var(--muted);text-align:center;padding:4px 10px}
     .editor-item{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0b192b;margin:10px 0}
+    .plan-editor-graphic{width:100%;min-height:300px;margin-bottom:12px}
+    .plan-name-field{display:block;margin-bottom:12px}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
     .grid4{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:8px}
@@ -82,6 +84,7 @@
     @media (max-width:580px){
       .exercise-top{grid-template-columns:1fr}
       .ex-graphic{width:100%;height:auto;min-height:220px}
+      .plan-editor-graphic{min-height:220px}
       .grid4,.grid3,.grid2{grid-template-columns:1fr}
       .kpi{grid-template-columns:1fr 1fr}
     }
@@ -351,26 +354,33 @@ function graphicSVG(cat){
   return m[cat] || m.other;
 }
 
-function getLastExercise(exId){
+function getLastWorkout(day){
   for(let i=data.workouts.length-1;i>=0;i--){
     const w=data.workouts[i];
-    const ex=w.exercises.find(x=>x.id===exId);
-    if(ex) return {date:w.date, ex};
+    if(w.day===day) return w;
   }
   return null;
+}
+
+function getLastExercise(day,planExercise){
+  const workout=getLastWorkout(day);
+  if(!workout) return null;
+  const ex=(workout.exercises||[]).find(x=>x.id===planExercise.id)
+    || (workout.exercises||[]).find(x=>x.name===planExercise.name);
+  return ex ? {date:workout.date, ex} : null;
 }
 
 function renderWorkout(){
   const box=document.getElementById('workoutList'); box.innerHTML='';
   const plan = currentPlan()[selectedDay];
   plan.forEach((ex,idx)=>{
-    const last=getLastExercise(ex.id);
+    const last=getLastExercise(selectedDay,ex);
     const dkey=selectedDay+'_'+ex.id;
     if(!draft[dkey]){
       draft[dkey]={
         weight:last?.ex?.weight ?? '',
         reps:Array(ex.sets).fill('').map((_,i)=>last?.ex?.reps?.[i] ?? ''),
-        rir:Array(ex.sets).fill(2)
+        rir:Array(ex.sets).fill(2).map((_,i)=>last?.ex?.rir?.[i] ?? 2)
       };
     } else {
       // match current number of sets after edit
@@ -379,7 +389,9 @@ function renderWorkout(){
     }
     const d=draft[dkey];
     const wrap=document.createElement('div'); wrap.className='exercise';
-    let lastTxt=last ? `Poprzednio ${new Date(last.date).toLocaleDateString('pl-PL')}: ${last.ex.weight||'—'} kg • ${last.ex.reps.join(' / ')}` : 'Brak poprzedniego wyniku';
+    let lastTxt=last
+      ? `Ostatni trening ${selectedDay} — ${new Date(last.date).toLocaleDateString('pl-PL')}: ${last.ex.weight||'—'} kg • powt. ${(last.ex.reps||[]).join(' / ')} • RIR ${(last.ex.rir||[]).join(' / ')||'—'}`
+      : `Brak poprzedniego wyniku dla treningu ${selectedDay}`;
     let rows='';
     for(let s=0;s<ex.sets;s++){
       rows += `<div class="set-grid">
@@ -468,12 +480,10 @@ function renderPlanEditor(){
         <b>${idx+1}. Ćwiczenie</b>
         <button class="btn bad" data-remove="${ex.id}" style="padding:8px 10px">Usuń</button>
       </div>
-      <div class="row" style="margin-bottom:10px">
-        <div class="ex-graphic" style="width:86px;height:86px">${exerciseGraphicHTML(ex)}</div>
-        <div style="flex:1">
-          <label class="tiny">Nazwa</label>
-          <input data-field="name" data-id="${ex.id}" value="${escapeHtml(ex.name)}">
-        </div>
+      <div class="ex-graphic plan-editor-graphic">${exerciseGraphicHTML(ex)}</div>
+      <div class="plan-name-field">
+        <label class="tiny">Nazwa ćwiczenia</label>
+        <input data-field="name" data-id="${ex.id}" value="${escapeHtml(ex.name)}">
       </div>
       <div class="grid4">
         <div><label class="tiny">Kategoria grafiki</label>
