@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#08111f",
   "theme_color": "#0b1f3a",
-  "description": "Prosty tracker treningów A/B/C, progresji, masy, obwodów i diety.",
+  "description": "Tracker treningów A/B/C, progresji, masy, obwodów i diety z grafikami ćwiczeń i edycją planu.",
   "icons": [
     {
       "src": "icon.svg",

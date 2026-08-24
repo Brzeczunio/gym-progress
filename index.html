@@ -20,13 +20,13 @@
     *{box-sizing:border-box}
     body{margin:0;background:linear-gradient(180deg,#07111f,#0a1526 35%,#08111f);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     button,input,select,textarea{font:inherit}
-    .app{max-width:760px;margin:0 auto;min-height:100vh;padding-bottom:92px}
+    .app{max-width:840px;margin:0 auto;min-height:100vh;padding-bottom:92px}
     header{position:sticky;top:0;z-index:20;background:rgba(8,17,31,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:14px 16px 10px}
     .brand{display:flex;align-items:center;gap:12px}
     .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#1a3559,#f2b84b);display:grid;place-items:center;font-weight:900;color:#08111f}
     h1{font-size:20px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:3px}
     main{padding:14px}
-    .tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:rgba(7,17,31,.98);border-top:1px solid var(--line);z-index:30;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+    .tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(840px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:rgba(7,17,31,.98);border-top:1px solid var(--line);z-index:30;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
     .tab{border:0;background:transparent;color:var(--muted);padding:8px 4px;border-radius:10px;font-size:11px}
     .tab.active{color:var(--text);background:#13243c}
     .tab b{display:block;font-size:18px;margin-bottom:2px}
@@ -34,12 +34,14 @@
     .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
     .card h2,.card h3{margin:0 0 10px}
     .row{display:flex;gap:10px;align-items:center}.between{justify-content:space-between}.wrap{flex-wrap:wrap}
-    .btn{border:0;border-radius:12px;padding:11px 14px;background:#173151;color:var(--text);font-weight:700}
+    .btn{border:0;border-radius:12px;padding:11px 14px;background:#173151;color:var(--text);font-weight:700;cursor:pointer}
     .btn.primary{background:var(--accent);color:#08111f}.btn.good{background:var(--good);color:#07160d}.btn.bad{background:#4b1f27;color:#ffd9dc}.btn.ghost{background:transparent;border:1px solid var(--line)}
     .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-    .seg button{padding:11px;border-radius:12px;border:1px solid var(--line);background:#0e1c2e;color:var(--muted);font-weight:800}
+    .seg button{padding:11px;border-radius:12px;border:1px solid var(--line);background:#0e1c2e;color:var(--muted);font-weight:800;cursor:pointer}
     .seg button.active{background:var(--accent);color:#08111f;border-color:var(--accent)}
     .exercise{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#0b192b}
+    .exercise-top{display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:start}
+    .ex-graphic{width:112px;height:112px;border-radius:14px;background:#091525;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
     .ex-title{font-weight:800;font-size:16px}.ex-meta{color:var(--muted);font-size:12px;margin-top:4px}
     .set-grid{display:grid;grid-template-columns:42px 1fr 1fr 1fr;gap:8px;align-items:center;margin-top:10px}
     .set-grid.head{font-size:11px;color:var(--muted);margin-top:8px}
@@ -62,9 +64,18 @@
     .time{background:var(--accent);color:#08111f;border-radius:12px;padding:10px;text-align:center;font-weight:900}
     ul.clean{padding-left:18px;margin:8px 0}
     .note{border-left:4px solid var(--accent);padding:8px 10px;background:#0b192b;border-radius:8px}
-    .danger{color:#ffc4c4}.ok{color:#bff0d1}
-    .install{display:none}
     .footer-note{font-size:11px;color:var(--muted);text-align:center;padding:4px 10px}
+    .editor-item{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0b192b;margin:10px 0}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .grid4{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:8px}
+    .install{display:none}
+    @media (max-width:580px){
+      .exercise-top{grid-template-columns:1fr}
+      .ex-graphic{width:100%;height:130px}
+      .grid4,.grid3,.grid2{grid-template-columns:1fr}
+      .kpi{grid-template-columns:1fr 1fr}
+    }
   </style>
 </head>
 <body>
@@ -74,7 +85,7 @@
       <div class="logo">GP</div>
       <div>
         <h1>Gym Progress</h1>
-        <div class="sub">Plan A/B/C • progresja • masa • obwody • dieta</div>
+        <div class="sub">Grafiki ćwiczeń • edycja planu • progresja • masa • dieta</div>
       </div>
     </div>
   </header>
@@ -85,7 +96,7 @@
         <div class="row between">
           <div>
             <h2>Dzisiejszy trening</h2>
-            <div class="small">Wybierz dzień i wpisuj serie. Wszystko zapisuje się lokalnie.</div>
+            <div class="small">Wybierz dzień i wpisuj serie. Plan możesz edytować w zakładce „Plan”.</div>
           </div>
           <button id="installBtn" class="btn primary install">Zainstaluj</button>
         </div>
@@ -110,10 +121,20 @@
       </div>
     </section>
 
-    <section id="history" class="view">
+    <section id="plan" class="view">
       <div class="card">
-        <h2>Historia treningów</h2>
-        <div id="historyList" class="list"></div>
+        <h2>Edycja ćwiczeń</h2>
+        <div class="small">Możesz zmieniać nazwę, liczbę serii, zakres powtórzeń, skok ciężaru, kategorię grafiki i notatkę techniczną. Zmiany zapisują się lokalnie na telefonie.</div>
+      </div>
+      <div class="seg">
+        <button data-plan-day="A" class="active">Plan A</button>
+        <button data-plan-day="B">Plan B</button>
+        <button data-plan-day="C">Plan C</button>
+      </div>
+      <div id="planEditor"></div>
+      <div class="card">
+        <button id="addExerciseBtn" class="btn primary" style="width:100%;margin-bottom:8px">Dodaj ćwiczenie do wybranego dnia</button>
+        <button id="resetPlan" class="btn bad" style="width:100%">Przywróć domyślny plan</button>
       </div>
     </section>
 
@@ -129,7 +150,7 @@
           <div class="box"><div class="l">Ostatni pomiar</div><div id="lastWeight" class="v">—</div></div>
           <div class="box"><div class="l">Średnia 7 dni</div><div id="avg7" class="v">—</div></div>
         </div>
-        <canvas id="weightChart" width="700" height="220" style="margin-top:12px"></canvas>
+        <canvas id="weightChart" width="760" height="220" style="margin-top:12px"></canvas>
         <div id="weightTrend" class="status warn">Dodaj pomiary, aby zobaczyć trend.</div>
       </div>
 
@@ -175,7 +196,7 @@
     <section id="settings" class="view">
       <div class="card">
         <h2>Ustawienia i dane</h2>
-        <p class="small">Dane są zapisywane tylko w pamięci tej przeglądarki.</p>
+        <p class="small">Dane są zapisywane tylko w pamięci tej przeglądarki / PWA na telefonie.</p>
         <button id="exportData" class="btn" style="width:100%;margin-bottom:8px">Eksportuj dane do JSON</button>
         <label class="btn ghost" style="display:block;text-align:center;cursor:pointer">
           Importuj dane z JSON
@@ -199,7 +220,7 @@
 
   <nav class="tabs">
     <button class="tab active" data-view="workout"><b>🏋️</b>Trening</button>
-    <button class="tab" data-view="history"><b>📚</b>Historia</button>
+    <button class="tab" data-view="plan"><b>📝</b>Plan</button>
     <button class="tab" data-view="body"><b>⚖️</b>Masa</button>
     <button class="tab" data-view="diet"><b>🥚</b>Dieta</button>
     <button class="tab" data-view="settings"><b>⚙️</b>Opcje</button>
@@ -207,45 +228,86 @@
 </div>
 
 <script>
-const PLAN = {
+const DEFAULT_PLAN = {
   A: [
-    {id:'A1', name:'Wyciskanie hantli na ławce płaskiej, chwyt półneutralny', sets:3, min:8, max:12, step:2, note:'Łopatki lekko do siebie i w dół; łokcie 30–45°; opuszczaj 2–3 s.'},
-    {id:'A2', name:'Rozpiętki na wyciągu na wysokości klatki', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków do przodu.'},
-    {id:'A3', name:'Wiosłowanie hantlem z podparciem', sets:3, min:8, max:12, step:2, note:'Nie skręcaj tułowia.'},
-    {id:'A4', name:'Martwy ciąg rumuński z hantlami', sets:3, min:8, max:10, step:2, note:'Biodra do tyłu, plecy neutralne.'},
-    {id:'A5', name:'Prostowanie nóg na maszynie — lekko', sets:2, min:12, max:15, step:2.5, note:'Ruch kontrolowany, bez szarpania.'},
-    {id:'A6', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Bez szarpania i unoszenia barków do uszu.'},
-    {id:'A7', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie blisko tułowia.'}
+    {id:'A1', category:'press', name:'Wyciskanie hantli na ławce płaskiej, chwyt półneutralny', sets:3, min:8, max:12, step:2, note:'Łopatki lekko do siebie i w dół; łokcie 30–45°; opuszczaj 2–3 s.'},
+    {id:'A2', category:'fly', name:'Rozpiętki na wyciągu na wysokości klatki', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków do przodu.'},
+    {id:'A3', category:'row', name:'Wiosłowanie hantlem z podparciem', sets:3, min:8, max:12, step:2, note:'Nie skręcaj tułowia.'},
+    {id:'A4', category:'hinge', name:'Martwy ciąg rumuński z hantlami', sets:3, min:8, max:10, step:2, note:'Biodra do tyłu, plecy neutralne.'},
+    {id:'A5', category:'legext', name:'Prostowanie nóg na maszynie — lekko', sets:2, min:12, max:15, step:2.5, note:'Ruch kontrolowany, bez szarpania.'},
+    {id:'A6', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Bez szarpania i unoszenia barków do uszu.'},
+    {id:'A7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie blisko tułowia.'}
   ],
   B: [
-    {id:'B1', name:'Ściąganie linek z góry w dół (high-to-low fly)', sets:2, min:12, max:15, step:2.5, note:'Nie cofaj barków zbyt głęboko za linię tułowia.'},
-    {id:'B2', name:'Ściąganie uchwytu neutralnego do klatki', sets:3, min:8, max:12, step:5, note:'Klatka uniesiona, bez bujania.'},
-    {id:'B3', name:'Hip thrust', sets:4, min:8, max:12, step:5, note:'Pauza 1 s u góry, napnij pośladki.'},
-    {id:'B4', name:'Prostowanie nóg na maszynie — obie nogi', sets:3, min:12, max:15, step:2.5, note:'Ruch płynny, bez „kopania” ciężaru.'},
-    {id:'B5', name:'Odwrotne rozpiętki z klatką opartą o ławkę', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
-    {id:'B6', name:'Uginanie młotkowe', sets:3, min:10, max:15, step:2, note:'Nadgarstki neutralnie, bez bujania.'},
-    {id:'B7', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie nieruchomo przy bokach.'}
+    {id:'B1', category:'fly', name:'Ściąganie linek z góry w dół (high-to-low fly)', sets:2, min:12, max:15, step:2.5, note:'Nie cofaj barków zbyt głęboko za linię tułowia.'},
+    {id:'B2', category:'pulldown', name:'Ściąganie uchwytu neutralnego do klatki', sets:3, min:8, max:12, step:5, note:'Klatka uniesiona, bez bujania.'},
+    {id:'B3', category:'hipthrust', name:'Hip thrust', sets:4, min:8, max:12, step:5, note:'Pauza 1 s u góry, napnij pośladki.'},
+    {id:'B4', category:'legext', name:'Prostowanie nóg na maszynie — obie nogi', sets:3, min:12, max:15, step:2.5, note:'Ruch płynny, bez „kopania” ciężaru.'},
+    {id:'B5', category:'rear', name:'Odwrotne rozpiętki z klatką opartą o ławkę', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
+    {id:'B6', category:'biceps', name:'Uginanie młotkowe', sets:3, min:10, max:15, step:2, note:'Nadgarstki neutralnie, bez bujania.'},
+    {id:'B7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie nieruchomo przy bokach.'}
   ],
   C: [
-    {id:'C1', name:'Wyciskanie hantli na podłodze, chwyt neutralny', sets:3, min:8, max:12, step:2, note:'Kontrolowane opuszczanie; bark nie wysuwa się do przodu.'},
-    {id:'C2', name:'Rozpiętki na wyciągu na wysokości klatki / lekko high-to-low', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków.'},
-    {id:'C3', name:'Wiosłowanie hantlami z klatką opartą o ławkę', sets:3, min:10, max:15, step:2, note:'Bez bujania tułowiem.'},
-    {id:'C4', name:'Uginanie nóg na maszynie', sets:3, min:10, max:15, step:2.5, note:'Pełna kontrola i pauza przy zgięciu.'},
-    {id:'C5', name:'Cable pull-through', sets:3, min:10, max:15, step:5, note:'Biodra do tyłu, pośladki prowadzą ruch.'},
-    {id:'C6', name:'Prostowanie nóg na maszynie — jednonóż', sets:2, min:15, max:20, step:1.25, note:'Lekki ciężar, pełna kontrola.'},
-    {id:'C7', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
-    {id:'C8', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Nadgarstki neutralne, bez bujania.'}
+    {id:'C1', category:'press', name:'Wyciskanie hantli na podłodze, chwyt neutralny', sets:3, min:8, max:12, step:2, note:'Kontrolowane opuszczanie; bark nie wysuwa się do przodu.'},
+    {id:'C2', category:'fly', name:'Rozpiętki na wyciągu na wysokości klatki / lekko high-to-low', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków.'},
+    {id:'C3', category:'row', name:'Wiosłowanie hantlami z klatką opartą o ławkę', sets:3, min:10, max:15, step:2, note:'Bez bujania tułowiem.'},
+    {id:'C4', category:'legcurl', name:'Uginanie nóg na maszynie', sets:3, min:10, max:15, step:2.5, note:'Pełna kontrola i pauza przy zgięciu.'},
+    {id:'C5', category:'hinge', name:'Cable pull-through', sets:3, min:10, max:15, step:5, note:'Biodra do tyłu, pośladki prowadzą ruch.'},
+    {id:'C6', category:'legext', name:'Prostowanie nóg na maszynie — jednonóż', sets:2, min:15, max:20, step:1.25, note:'Lekki ciężar, pełna kontrola.'},
+    {id:'C7', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
+    {id:'C8', category:'biceps', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Nadgarstki neutralne, bez bujania.'}
   ]
 };
 
-const LS='gymProgressDataV1';
-let data = JSON.parse(localStorage.getItem(LS) || '{"workouts":[],"weights":[],"measures":[]}');
+const LS='gymProgressDataV2';
+let data = JSON.parse(localStorage.getItem(LS) || '{"workouts":[],"weights":[],"measures":[],"plan":null}');
+if(!data.plan) data.plan = structuredClone(DEFAULT_PLAN);
 let selectedDay='A';
+let selectedPlanDay='A';
 let draft={};
 
 function save(){ localStorage.setItem(LS, JSON.stringify(data)); }
 function todayISO(){ return new Date().toISOString().slice(0,10); }
 weightDate.value=todayISO(); measureDate.value=todayISO();
+
+function currentPlan(){ return data.plan || structuredClone(DEFAULT_PLAN); }
+
+function normalizeDayPlan(dayArr){
+  return dayArr.map((x,i)=>({
+    id: x.id || ('X'+(i+1)+'_'+Math.random().toString(36).slice(2,6)),
+    category: x.category || 'other',
+    name: x.name || 'Ćwiczenie',
+    sets: Number(x.sets)||3,
+    min: Number(x.min)||8,
+    max: Number(x.max)||12,
+    step: Number(x.step)||2,
+    note: x.note || ''
+  }));
+}
+
+function graphicSVG(cat){
+  const base = (inner) => `<svg viewBox="0 0 120 120" width="110" height="110" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="120" height="120" rx="16" fill="#091525"/>
+    <g stroke="#dcecff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">${inner}</g>
+    <g fill="#f2b84b">${cat==='press'||cat==='row'||cat==='hinge'||cat==='hipthrust'||cat==='fly'||cat==='rear'||cat==='pulldown'||cat==='triceps'||cat==='biceps'||cat==='legcurl'||cat==='legext'||cat==='latraise' ? '<circle cx="60" cy="22" r="8"/>' : ''}</g>
+  </svg>`;
+  const m = {
+    press: base(`<path d="M40 38 L80 38"/><path d="M60 30 L60 56"/><path d="M60 30 L46 46"/><path d="M60 30 L74 46"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><rect x="28" y="74" width="64" height="6" rx="3" fill="#dcecff" stroke="none"/><path d="M24 70 L24 84"/><path d="M96 70 L96 84"/><path d="M20 68 L28 68"/><path d="M92 68 L100 68"/>`),
+    fly: base(`<path d="M60 30 L60 56"/><path d="M60 30 L42 48"/><path d="M60 30 L78 48"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><path d="M18 32 C35 46, 42 50, 52 56"/><path d="M102 32 C85 46, 78 50, 68 56"/><circle cx="18" cy="32" r="3" fill="#59c3ff" stroke="none"/><circle cx="102" cy="32" r="3" fill="#59c3ff" stroke="none"/>`),
+    row: base(`<path d="M60 30 L60 56"/><path d="M60 30 L46 48"/><path d="M60 30 L74 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M46 48 L30 54"/><path d="M74 44 L90 48"/><rect x="86" y="44" width="10" height="8" rx="2" fill="#59c3ff" stroke="none"/>`),
+    hinge: base(`<path d="M60 30 L60 58"/><path d="M60 42 L42 48"/><path d="M60 58 L44 80"/><path d="M60 58 L70 84"/><path d="M42 48 L24 54"/><rect x="18" y="50" width="10" height="10" rx="2" fill="#59c3ff" stroke="none"/>`),
+    hipthrust: base(`<path d="M34 72 L58 72"/><path d="M58 72 L78 58"/><path d="M78 58 L92 58"/><path d="M58 72 L58 90"/><path d="M42 72 L42 90"/><rect x="48" y="46" width="36" height="8" rx="4" fill="#59c3ff" stroke="none"/><circle cx="28" cy="72" r="3" fill="#dcecff" stroke="none"/>`),
+    legext: base(`<path d="M56 28 L56 54"/><path d="M56 54 L56 76"/><path d="M56 54 L82 54"/><path d="M82 54 L96 44"/><rect x="28" y="72" width="24" height="8" rx="4" fill="#dcecff" stroke="none"/><rect x="82" y="42" width="16" height="8" rx="4" fill="#59c3ff" stroke="none"/><path d="M56 30 L44 44"/>`),
+    legcurl: base(`<path d="M36 54 L62 54"/><path d="M62 54 L78 54"/><path d="M78 54 L92 44"/><path d="M62 54 L54 80"/><rect x="82" y="42" width="14" height="8" rx="4" fill="#59c3ff" stroke="none"/><rect x="24" y="52" width="14" height="6" rx="3" fill="#dcecff" stroke="none"/>`),
+    latraise: base(`<path d="M60 30 L60 56"/><path d="M60 30 L34 44"/><path d="M60 30 L86 44"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><circle cx="30" cy="42" r="4" fill="#59c3ff" stroke="none"/><circle cx="90" cy="42" r="4" fill="#59c3ff" stroke="none"/>`),
+    rear: base(`<path d="M60 30 L60 56"/><path d="M60 30 L44 44"/><path d="M60 30 L76 44"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><path d="M44 44 L24 36"/><path d="M76 44 L96 36"/><circle cx="22" cy="36" r="4" fill="#59c3ff" stroke="none"/><circle cx="98" cy="36" r="4" fill="#59c3ff" stroke="none"/>`),
+    pulldown: base(`<path d="M22 22 L98 22"/><path d="M60 30 L60 56"/><path d="M60 30 L44 44"/><path d="M60 30 L76 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M40 34 L46 44"/><path d="M80 34 L74 44"/>`),
+    triceps: base(`<path d="M60 30 L60 56"/><path d="M60 30 L48 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M48 44 L48 62"/><circle cx="48" cy="66" r="4" fill="#59c3ff" stroke="none"/>`),
+    biceps: base(`<path d="M60 30 L60 56"/><path d="M60 30 L46 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M46 44 L38 54"/><path d="M38 54 L48 62"/><circle cx="48" cy="62" r="4" fill="#59c3ff" stroke="none"/>`),
+    other: base(`<path d="M60 30 L60 56"/><path d="M60 30 L44 44"/><path d="M60 30 L76 44"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/>`)
+  };
+  return m[cat] || m.other;
+}
 
 function getLastExercise(exId){
   for(let i=data.workouts.length-1;i>=0;i--){
@@ -258,15 +320,20 @@ function getLastExercise(exId){
 
 function renderWorkout(){
   const box=document.getElementById('workoutList'); box.innerHTML='';
-  PLAN[selectedDay].forEach((ex,idx)=>{
+  const plan = currentPlan()[selectedDay];
+  plan.forEach((ex,idx)=>{
     const last=getLastExercise(ex.id);
     const dkey=selectedDay+'_'+ex.id;
     if(!draft[dkey]){
       draft[dkey]={weight:last?.ex?.weight ?? '', reps:Array(ex.sets).fill('').map((_,i)=>last?.ex?.reps?.[i] ?? ''), rir:Array(ex.sets).fill(2)};
+    } else {
+      // match current number of sets after edit
+      draft[dkey].reps = Array(ex.sets).fill('').map((_,i)=>draft[dkey].reps[i] ?? '');
+      draft[dkey].rir = Array(ex.sets).fill(2).map((_,i)=>draft[dkey].rir[i] ?? 2);
     }
     const d=draft[dkey];
     const wrap=document.createElement('div'); wrap.className='exercise';
-    let lastTxt=last ? `Poprzednio ${last.date}: ${last.ex.weight||'—'} kg • ${last.ex.reps.join(' / ')}` : 'Brak poprzedniego wyniku';
+    let lastTxt=last ? `Poprzednio ${new Date(last.date).toLocaleDateString('pl-PL')}: ${last.ex.weight||'—'} kg • ${last.ex.reps.join(' / ')}` : 'Brak poprzedniego wyniku';
     let rows='';
     for(let s=0;s<ex.sets;s++){
       rows += `<div class="set-grid">
@@ -276,8 +343,11 @@ function renderWorkout(){
         <input data-role="rir" data-id="${dkey}" data-set="${s}" type="number" min="0" max="6" value="${d.rir[s]}" placeholder="RIR">
       </div>`;
     }
-    wrap.innerHTML = `<div class="row between"><div><div class="ex-title">${idx+1}. ${ex.name}</div><div class="ex-meta">${ex.sets} × ${ex.min}–${ex.max} • ${ex.note}</div></div></div>
-      <div class="tiny" style="margin-top:7px">${lastTxt}</div>
+    wrap.innerHTML = `<div class="exercise-top">
+        <div class="ex-graphic">${graphicSVG(ex.category)}</div>
+        <div><div class="ex-title">${idx+1}. ${ex.name}</div><div class="ex-meta">${ex.sets} × ${ex.min}–${ex.max} • ${ex.note}</div>
+        <div class="tiny" style="margin-top:7px">${lastTxt}</div></div>
+      </div>
       <div class="set-grid head"><div>Seria</div><div>kg</div><div>Powt.</div><div>RIR</div></div>${rows}
       <div id="status_${dkey}" class="status warn">Wpisz serie, aby zobaczyć sugestię progresji.</div>`;
     box.appendChild(wrap);
@@ -293,14 +363,16 @@ function renderWorkout(){
         const s=+e.target.dataset.set;
         draft[id][e.target.dataset.role][s]=parseFloat(e.target.value)||0;
       }
-      const exId=id.split('_')[1]; const ex=PLAN[selectedDay].find(x=>x.id===exId); updateStatus(ex,id);
+      const exId=id.split('_').slice(1).join('_');
+      const ex=currentPlan()[selectedDay].find(x=>x.id===exId); updateStatus(ex,id);
     });
   });
 }
 
 function updateStatus(ex,dkey){
   const el=document.getElementById('status_'+dkey); if(!el) return;
-  const d=draft[dkey]; const reps=d.reps.map(Number);
+  const d=draft[dkey]; if(!d){el.className='status warn'; el.textContent='Brak danych.'; return;}
+  const reps=d.reps.map(Number);
   if(reps.some(r=>!r)){ el.className='status warn'; el.textContent='Wpisz wszystkie serie.'; return; }
   const allTop=reps.every(r=>r>=ex.max);
   const allIn=reps.every(r=>r>=ex.min && r<=ex.max+5);
@@ -314,51 +386,82 @@ function updateStatus(ex,dkey){
   }
 }
 
-document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{ selectedDay=b.dataset.day; document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('active',x===b)); renderWorkout(); });
+document.querySelectorAll('.seg button[data-day]').forEach(b=>b.onclick=()=>{ selectedDay=b.dataset.day; document.querySelectorAll('.seg button[data-day]').forEach(x=>x.classList.toggle('active',x===b)); renderWorkout(); });
 
 saveWorkout.onclick=()=>{
   const painS=+shoulderPain.value||0, painK=+kneePain.value||0, swelling=kneeSwelling.checked;
-  const exercises=PLAN[selectedDay].map(ex=>{
+  const exercises=currentPlan()[selectedDay].map(ex=>{
     const d=draft[selectedDay+'_'+ex.id];
-    return {id:ex.id,name:ex.name,weight:Number(d.weight)||0,reps:d.reps.map(Number),rir:d.rir.map(Number),min:ex.min,max:ex.max};
+    return {id:ex.id,name:ex.name,weight:Number(d?.weight)||0,reps:(d?.reps||[]).map(Number),rir:(d?.rir||[]).map(Number),min:ex.min,max:ex.max};
   });
   if(exercises.some(x=>x.reps.some(r=>!r))){ alert('Uzupełnij wszystkie powtórzenia albo wpisz 0, jeśli serię pominąłeś.'); return; }
   data.workouts.push({date:new Date().toISOString(), day:selectedDay, exercises, shoulderPain:painS, kneePain:painK, kneeSwelling:swelling, note:workoutNote.value.trim()});
   save(); draft={}; shoulderPain.value=0;kneePain.value=0;kneeSwelling.checked=false;workoutNote.value='';
-  renderWorkout(); renderHistory(); alert('Trening zapisany.');
+  renderWorkout(); alert('Trening zapisany.');
 };
 
-function renderHistory(){
-  const el=historyList; el.innerHTML='';
-  [...data.workouts].reverse().forEach(w=>{
-    const d=new Date(w.date);
-    const div=document.createElement('div'); div.className='hist';
-    div.innerHTML=`<div class="row between"><b>Trening ${w.day}</b><span class="small">${d.toLocaleDateString('pl-PL')} ${d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})}</span></div>
-      <div class="tiny" style="margin:5px 0">Bark ${w.shoulderPain}/10 • Kolano ${w.kneePain}/10 ${w.kneeSwelling?'• OBRZĘK':''}</div>
-      ${w.exercises.map(x=>`<div class="small">${x.name}: <b>${x.weight||'—'} kg</b> • ${x.reps.join(' / ')}</div>`).join('')}
-      ${w.note?`<div class="tiny" style="margin-top:6px">📝 ${w.note}</div>`:''}`;
-    el.appendChild(div);
+function renderPlanEditor(){
+  const root = document.getElementById('planEditor');
+  root.innerHTML='';
+  const planDay = currentPlan()[selectedPlanDay];
+  planDay.forEach((ex,idx)=>{
+    const div=document.createElement('div');
+    div.className='editor-item';
+    div.innerHTML=`
+      <div class="row between" style="margin-bottom:10px">
+        <b>${idx+1}. Ćwiczenie</b>
+        <button class="btn bad" data-remove="${ex.id}" style="padding:8px 10px">Usuń</button>
+      </div>
+      <div class="row" style="margin-bottom:10px">
+        <div class="ex-graphic" style="width:86px;height:86px">${graphicSVG(ex.category)}</div>
+        <div style="flex:1">
+          <label class="tiny">Nazwa</label>
+          <input data-field="name" data-id="${ex.id}" value="${escapeHtml(ex.name)}">
+        </div>
+      </div>
+      <div class="grid4">
+        <div><label class="tiny">Kategoria grafiki</label>
+          <select data-field="category" data-id="${ex.id}">
+            ${['press','fly','row','hinge','hipthrust','legext','legcurl','latraise','rear','pulldown','triceps','biceps','other'].map(c=>`<option value="${c}" ${ex.category===c?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div><label class="tiny">Serie</label><input data-field="sets" data-id="${ex.id}" type="number" min="1" max="8" value="${ex.sets}"></div>
+        <div><label class="tiny">Min powt.</label><input data-field="min" data-id="${ex.id}" type="number" min="1" max="30" value="${ex.min}"></div>
+        <div><label class="tiny">Max powt.</label><input data-field="max" data-id="${ex.id}" type="number" min="1" max="40" value="${ex.max}"></div>
+      </div>
+      <div class="grid2" style="margin-top:8px">
+        <div><label class="tiny">Skok ciężaru</label><input data-field="step" data-id="${ex.id}" type="number" min="0.5" step="0.5" value="${ex.step}"></div>
+        <div><label class="tiny">Notatka techniczna</label><input data-field="note" data-id="${ex.id}" value="${escapeHtml(ex.note)}"></div>
+      </div>`;
+    root.appendChild(div);
   });
-  if(!data.workouts.length) el.innerHTML='<div class="small">Brak zapisanych treningów.</div>';
+
+  root.querySelectorAll('input,select').forEach(inp=>inp.addEventListener('input',e=>{
+    const ex = currentPlan()[selectedPlanDay].find(x=>x.id===e.target.dataset.id);
+    const f=e.target.dataset.field;
+    if(['sets','min','max','step'].includes(f)) ex[f]=Number(e.target.value)||ex[f];
+    else ex[f]=e.target.value;
+    save();
+    if(f==='category') renderPlanEditor();
+    renderWorkout();
+  }));
+
+  root.querySelectorAll('button[data-remove]').forEach(btn=>btn.onclick=()=>{
+    const id=btn.dataset.remove;
+    data.plan[selectedPlanDay]=data.plan[selectedPlanDay].filter(x=>x.id!==id);
+    save(); renderPlanEditor(); renderWorkout();
+  });
 }
-
-function sortByDate(a,b){ return a.date.localeCompare(b.date); }
-
-addWeight.onclick=()=>{
-  const date=weightDate.value, value=parseFloat(weightValue.value);
-  if(!date||!value) return;
-  data.weights=data.weights.filter(x=>x.date!==date);
-  data.weights.push({date,value}); data.weights.sort(sortByDate); save(); weightValue.value=''; renderBody();
+document.querySelectorAll('.seg button[data-plan-day]').forEach(b=>b.onclick=()=>{ selectedPlanDay=b.dataset.planDay; document.querySelectorAll('.seg button[data-plan-day]').forEach(x=>x.classList.toggle('active',x===b)); renderPlanEditor(); });
+addExerciseBtn.onclick=()=>{
+  const id=selectedPlanDay+'_'+Date.now().toString(36);
+  data.plan[selectedPlanDay].push({id,category:'other',name:'Nowe ćwiczenie',sets:3,min:8,max:12,step:2,note:''});
+  save(); renderPlanEditor(); renderWorkout();
+};
+resetPlan.onclick=()=>{
+  if(confirm('Przywrócić domyślny plan?')){ data.plan=structuredClone(DEFAULT_PLAN); save(); draft={}; renderPlanEditor(); renderWorkout(); }
 };
 
-addMeasure.onclick=()=>{
-  const date=measureDate.value; if(!date) return;
-  const m={date, waist:+waist.value||null, chest:+chest.value||null, bicepsL:+bicepsL.value||null, bicepsR:+bicepsR.value||null};
-  data.measures=data.measures.filter(x=>x.date!==date); data.measures.push(m); data.measures.sort(sortByDate); save();
-  waist.value=chest.value=bicepsL.value=bicepsR.value=''; renderBody();
-};
-
-function avg(arr){ return arr.length?arr.reduce((s,x)=>s+x,0)/arr.length:null; }
 function renderBody(){
   const ws=data.weights;
   lastWeight.textContent=ws.length?ws[ws.length-1].value.toFixed(1)+' kg':'—';
@@ -380,6 +483,26 @@ function renderBody(){
     measureList.appendChild(div);
   });
 }
+
+function renderHistory(){ /* retained for export only if needed later */ }
+
+function sortByDate(a,b){ return a.date.localeCompare(b.date); }
+function avg(arr){ return arr.length?arr.reduce((s,x)=>s+x,0)/arr.length:null; }
+function escapeHtml(v){ return String(v).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'); }
+
+addWeight.onclick=()=>{
+  const date=weightDate.value, value=parseFloat(weightValue.value);
+  if(!date||!value) return;
+  data.weights=data.weights.filter(x=>x.date!==date);
+  data.weights.push({date,value}); data.weights.sort(sortByDate); save(); weightValue.value=''; renderBody();
+};
+
+addMeasure.onclick=()=>{
+  const date=measureDate.value; if(!date) return;
+  const m={date, waist:+waist.value||null, chest:+chest.value||null, bicepsL:+bicepsL.value||null, bicepsR:+bicepsR.value||null};
+  data.measures=data.measures.filter(x=>x.date!==date); data.measures.push(m); data.measures.sort(sortByDate); save();
+  waist.value=chest.value=bicepsL.value=bicepsR.value=''; renderBody();
+};
 
 function drawWeightChart(){
   const c=weightChart, ctx=c.getContext('2d'), pts=data.weights.slice(-30); ctx.clearRect(0,0,c.width,c.height);
@@ -404,8 +527,8 @@ function drawWeightChart(){
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(t.dataset.view).classList.add('active');
-  if(t.dataset.view==='history') renderHistory();
   if(t.dataset.view==='body') renderBody();
+  if(t.dataset.view==='plan') renderPlanEditor();
 });
 
 exportData.onclick=()=>{
@@ -414,9 +537,16 @@ exportData.onclick=()=>{
 };
 importData.onchange=async e=>{
   const f=e.target.files[0]; if(!f)return;
-  try{ const parsed=JSON.parse(await f.text()); data=parsed; save(); renderHistory();renderBody();renderWorkout();alert('Dane zaimportowane.'); }catch(err){alert('Nieprawidłowy plik JSON.');}
+  try{ 
+    const parsed=JSON.parse(await f.text()); 
+    data=parsed; 
+    if(!data.plan) data.plan=structuredClone(DEFAULT_PLAN);
+    save(); 
+    draft={};
+    renderPlanEditor();renderBody();renderWorkout();alert('Dane zaimportowane.'); 
+  }catch(err){alert('Nieprawidłowy plik JSON.');}
 };
-resetData.onclick=()=>{if(confirm('Na pewno usunąć wszystkie dane?')){data={workouts:[],weights:[],measures:[]};save();draft={};renderWorkout();renderHistory();renderBody();}};
+resetData.onclick=()=>{if(confirm('Na pewno usunąć wszystkie dane?')){data={workouts:[],weights:[],measures:[],plan:structuredClone(DEFAULT_PLAN)};save();draft={};renderWorkout();renderBody();renderPlanEditor();}};
 
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.style.display='inline-block';});
@@ -424,7 +554,8 @@ installBtn.onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();a
 
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
 
-renderWorkout(); renderHistory(); renderBody();
+save();
+renderWorkout(); renderPlanEditor(); renderBody();
 </script>
 </body>
 </html>
