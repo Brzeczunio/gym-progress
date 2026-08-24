@@ -1,4 +1,4 @@
-GYM PROGRESS V21 — PLAN A/B ZWERYFIKOWANY
+GYM PROGRESS V22 — PLAN A/B ZWERYFIKOWANY
 
 PLAN A:
 1. Wyciskanie hantli na ławce płaskiej, chwyt półneutralny — 3x8-12
@@ -25,13 +25,15 @@ WAŻNE:
 - Historia i dane pozostają w tym samym localStorage.
 
 
-Wersja v21: komplet ciemnych grafik dla wszystkich ćwiczeń z planu A/B/C, gotowe do GitHub Pages.
+Wersja v22: komplet ciemnych grafik dla wszystkich ćwiczeń z planu A/B/C, gotowe do GitHub Pages.
 
 
-Wersja v21: wszystkie ćwiczenia dostępne w aplikacji mają spójne, wygenerowane grafiki w ciemnym stylu.
+Wersja v22: wszystkie ćwiczenia dostępne w aplikacji mają spójne, wygenerowane grafiki w ciemnym stylu.
 
 
-Wersja v21: grafiki z arkuszy zostały wycięte do osobnych plików PNG i bezpośrednio podpięte pod ćwiczenia w aplikacji.
+Wersja v22: grafiki z arkuszy zostały wycięte do osobnych plików PNG i bezpośrednio podpięte pod ćwiczenia w aplikacji.
 
 
-V21: grafiki mają dodatkowy margines bezpieczeństwa i nie powinny być ucinane w miniaturach na telefonie.
+V22: grafiki mają dodatkowy margines bezpieczeństwa i nie powinny być ucinane w miniaturach na telefonie.
+
+Wersja v22: powiększone pola miniatur na telefonie, szczególnie wysokość, żeby obrazki nie były obcięte od dołu.
