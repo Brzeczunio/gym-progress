@@ -1,11 +1,11 @@
-GYM PROGRESS V2
+GYM PROGRESS V3
 
 NOWOŚCI:
-- grafiki ćwiczeń w kartach treningowych
-- zakładka "Plan" do edycji ćwiczeń
-- można zmieniać nazwę, serie, zakres powtórzeń, skok ciężaru, kategorię grafiki i notatkę
-- można dodawać i usuwać ćwiczenia
+- lepsze grafiki treningów A/B/C w aplikacji (na bazie wcześniej wygenerowanych plansz)
+- lepsza grafika diety
+- kliknij grafikę / przycisk "Powiększ", aby zobaczyć większy podgląd
+- nadal możesz edytować ćwiczenia w zakładce Plan
 
 PUBLIKACJA:
-Wrzuć pliki do GitHub Pages lub Netlify jak poprzednio.
-Dane nadal zapisują się lokalnie w telefonie / przeglądarce.
+Podmień pliki na GitHub Pages tak jak poprzednio.
+Po podmianie najlepiej odśwież stronę i ewentualnie zainstaluj aplikację ponownie, jeśli trzyma cache.
