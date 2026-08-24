@@ -1,11 +1,15 @@
-GYM PROGRESS V4
+GYM PROGRESS V7
 
-NOWOŚCI:
-- zamiast prostych ikonek są wycięte rysunki z wcześniej wygenerowanych grafik treningowych
-- osobne obrazki przypisane do domyślnych ćwiczeń A/B/C
-- kliknij obrazek ćwiczenia, aby go powiększyć
-- edycja planu nadal działa; dla nowych ćwiczeń bez przypisanego obrazka aplikacja pokaże prostą ikonę zastępczą
+POPRAWKI:
+- większe zdjęcia / grafiki ćwiczeń w planie i w treningu
+- poprawiony układ nazw ćwiczeń, żeby tekst się nie rozjeżdżał
+- aplikacja podstawia ostatnie kg, powtórzenia i RIR z poprzedniego treningu tego samego dnia planu (A/B/C)
+- historia treningów pozostaje
+- biblioteka ćwiczeń pozostaje
 
-PUBLIKACJA:
-Podmień pliki na GitHub Pages tak jak poprzednio.
-Po wdrożeniu odśwież stronę; jeśli stara wersja siedzi w cache, usuń PWA i zainstaluj ponownie.
+DANE:
+- używa tego samego lokalnego magazynu co poprzednia wersja, więc dane powinny zostać zachowane
+
+WDROŻENIE:
+- podmień pliki na GitHub Pages
+- jeśli telefon pokaże starą wersję, odśwież stronę lub zainstaluj aplikację ponownie
