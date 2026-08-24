@@ -1,0 +1,526 @@
+
+const DEFAULT_PLAN = {
+  A: [
+    {id:'A1', category:'press', name:'Wyciskanie hantli na ławce płaskiej, chwyt półneutralny', sets:3, min:8, max:12, step:2, note:'Łopatki lekko do siebie i w dół; łokcie 30–45°; opuszczaj 2–3 s.'},
+    {id:'A2', category:'fly', name:'Rozpiętki na wyciągu na wysokości klatki', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków do przodu.'},
+    {id:'A3', category:'row', name:'Wiosłowanie hantlem z podparciem', sets:3, min:8, max:12, step:2, note:'Nie skręcaj tułowia.'},
+    {id:'A4', category:'hinge', name:'Martwy ciąg rumuński z hantlami', sets:3, min:8, max:10, step:2, note:'Biodra do tyłu, plecy neutralne.'},
+    {id:'A5', category:'legext', name:'Prostowanie nóg na maszynie — lekko', sets:2, min:12, max:15, step:2.5, note:'Ruch kontrolowany, bez szarpania.'},
+    {id:'A6', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Bez szarpania i unoszenia barków do uszu.'},
+    {id:'A7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie blisko tułowia.'}
+  ],
+  B: [
+    {id:'B1', category:'fly', name:'Ściąganie linek z góry w dół (high-to-low fly)', sets:2, min:12, max:15, step:2.5, note:'Nie cofaj barków zbyt głęboko za linię tułowia.'},
+    {id:'B2', category:'pulldown', name:'Ściąganie uchwytu neutralnego do klatki', sets:3, min:8, max:12, step:5, note:'Klatka uniesiona, bez bujania.'},
+    {id:'B3', category:'hipthrust', name:'Hip thrust', sets:4, min:8, max:12, step:5, note:'Pauza 1 s u góry, napnij pośladki.'},
+    {id:'B4', category:'legext', name:'Prostowanie nóg na maszynie — obie nogi', sets:3, min:12, max:15, step:2.5, note:'Ruch płynny, bez „kopania” ciężaru.'},
+    {id:'B5', category:'rear', name:'Odwrotne rozpiętki z klatką opartą o ławkę', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
+    {id:'B6', category:'biceps', name:'Uginanie młotkowe', sets:3, min:10, max:15, step:2, note:'Nadgarstki neutralnie, bez bujania.'},
+    {id:'B7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie nieruchomo przy bokach.'}
+  ],
+  C: [
+    {id:'C1', category:'press', name:'Wyciskanie hantli na podłodze, chwyt neutralny', sets:3, min:8, max:12, step:2, note:'Kontrolowane opuszczanie; bark nie wysuwa się do przodu.'},
+    {id:'C2', category:'fly', name:'Rozpiętki na wyciągu na wysokości klatki / lekko high-to-low', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków.'},
+    {id:'C3', category:'row', name:'Wiosłowanie hantlami z klatką opartą o ławkę', sets:3, min:10, max:15, step:2, note:'Bez bujania tułowiem.'},
+    {id:'C4', category:'legcurl', name:'Uginanie nóg na maszynie', sets:3, min:10, max:15, step:2.5, note:'Pełna kontrola i pauza przy zgięciu.'},
+    {id:'C5', category:'hinge', name:'Cable pull-through', sets:3, min:10, max:15, step:5, note:'Biodra do tyłu, pośladki prowadzą ruch.'},
+    {id:'C6', category:'legext', name:'Prostowanie nóg na maszynie — jednonóż', sets:2, min:15, max:20, step:1.25, note:'Lekki ciężar, pełna kontrola.'},
+    {id:'C7', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
+    {id:'C8', category:'biceps', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Nadgarstki neutralne, bez bujania.'}
+  ]
+};
+
+
+const EXERCISE_IMAGES = {
+  A1:'eximg/A1.png', A2:'eximg/A2.png', A3:'eximg/A3.png', A4:'eximg/A4.png', A5:'eximg/A5.png', A6:'eximg/A6.png',
+  B1:'eximg/B1.png', B2:'eximg/B2.png', B3:'eximg/B3.png', B4:'eximg/B4.png', B5:'eximg/B5.png', B6:'eximg/B6.png', B7:'eximg/B7.png',
+  C1:'eximg/C1.png', C2:'eximg/C2.png', C3:'eximg/C3.png', C4:'eximg/C4.png', C5:'eximg/C5.png', C6:'eximg/C6.png', C7:'eximg/C7.png', C8:'eximg/C8.png'
+};
+const CATEGORY_IMAGES = {
+  press:'eximg/A1.png', fly:'eximg/C2.png', row:'eximg/C3.png', hinge:'eximg/A4.png', hipthrust:'eximg/B3.png', legext:'eximg/B4.png', legcurl:'eximg/C4.png', latraise:'eximg/C7.png', rear:'eximg/B5.png', pulldown:'eximg/B2.png', triceps:'eximg/B7.png', biceps:'eximg/B6.png', abduction:'eximg/B3.png', calf:'eximg/C6.png', core:'eximg/C5.png'
+};
+function exerciseGraphicHTML(ex){
+  const src = ex.imageSrc || EXERCISE_IMAGES[ex.id] || CATEGORY_IMAGES[ex.category];
+  if(src){
+    return `<img src="${src}" alt="${ex.name}" data-zoom="${src}">`;
+  }
+  return graphicSVG(ex.category);
+}
+function openModal(src){
+  const modal=document.getElementById('imgModal');
+  const img=document.getElementById('modalImg');
+  img.src=src;
+  modal.classList.add('active');
+}
+function closeModal(){ document.getElementById('imgModal').classList.remove('active'); }
+
+
+const EXERCISE_LIBRARY = [
+  {name:'Wyciskanie hantli na ławce płaskiej', muscle:'Klatka', equipment:'Hantle', category:'press', imageSrc:'eximg/A1.png', sets:3,min:8,max:12,step:2,note:'Łopatki lekko ściągnięte; łokcie ok. 30–45°.'},
+  {name:'Wyciskanie hantli na podłodze', muscle:'Klatka', equipment:'Hantle', category:'press', imageSrc:'eximg/C1.png', sets:3,min:8,max:12,step:2,note:'Podłoga ogranicza głębokość i rozciągnięcie barku.'},
+  {name:'Chest press na maszynie — chwyt neutralny', muscle:'Klatka', equipment:'Maszyna', category:'press', imageSrc:'eximg/A1.png', sets:3,min:8,max:12,step:5,note:'Nie wysuwaj barków do przodu przy końcu serii.'},
+  {name:'Rozpiętki na wyciągu na wysokości klatki', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/A2.png', sets:2,min:12,max:15,step:2.5,note:'Lekko ugięte łokcie, kontrolowany zakres.'},
+  {name:'Rozpiętki high-to-low na wyciągu', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/B1.png', sets:2,min:12,max:15,step:2.5,note:'Dół i środek klatki; prowadź dłonie w dół i do środka.'},
+  {name:'Rozpiętki low-to-high na wyciągu', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/C2.png', sets:2,min:12,max:15,step:2.5,note:'Górna część klatki; nie unoś barków.'},
+  {name:'Pompki na uchwytach / podwyższeniu', muscle:'Klatka', equipment:'Masa ciała', category:'press', imageSrc:'eximg/C1.png', sets:3,min:8,max:15,step:1,note:'Dobierz wysokość tak, aby bark był spokojny.'},
+
+  {name:'Unoszenie ramienia bokiem na wyciągu', muscle:'Barki', equipment:'Wyciąg', category:'latraise', imageSrc:'eximg/C7.png', sets:3,min:12,max:20,step:1,note:'Nie unoś barków do uszu.'},
+  {name:'Unoszenie bokiem na maszynie', muscle:'Barki', equipment:'Maszyna', category:'latraise', imageSrc:'eximg/C7.png', sets:3,min:12,max:20,step:2.5,note:'Płynny ruch, bez szarpania.'},
+  {name:'Odwrotne rozpiętki z klatką opartą', muscle:'Barki', equipment:'Hantle', category:'rear', imageSrc:'eximg/B5.png', sets:3,min:12,max:20,step:1,note:'Tylny akton; bez unoszenia barków.'},
+  {name:'Reverse pec deck', muscle:'Barki', equipment:'Maszyna', category:'rear', imageSrc:'eximg/B5.png', sets:3,min:12,max:20,step:2.5,note:'Stabilny tułów, bez unoszenia barków do uszu.'},
+  {name:'Face pull z liną', muscle:'Barki', equipment:'Wyciąg', category:'rear', imageSrc:'eximg/B5.png', sets:2,min:12,max:20,step:2.5,note:'Lekko, kontrolowanie; lina w kierunku twarzy.'},
+
+  {name:'Ściąganie uchwytu neutralnego do klatki', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/B2.png', sets:3,min:8,max:12,step:5,note:'Bez bujania tułowiem.'},
+  {name:'Ściąganie drążka jednorącz', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/B2.png', sets:3,min:10,max:15,step:2.5,note:'Łokieć prowadź w dół, bez skręcania.'},
+  {name:'Wiosłowanie hantlem z podparciem', muscle:'Plecy', equipment:'Hantle', category:'row', imageSrc:'eximg/A3.png', sets:3,min:8,max:12,step:2,note:'Nie skręcaj tułowia.'},
+  {name:'Wiosłowanie hantlami z klatką opartą', muscle:'Plecy', equipment:'Hantle', category:'row', imageSrc:'eximg/C3.png', sets:3,min:10,max:15,step:2,note:'Klatka oparta, bez bujania.'},
+  {name:'Wiosłowanie siedząc na wyciągu — neutralnie', muscle:'Plecy', equipment:'Wyciąg', category:'row', imageSrc:'eximg/C3.png', sets:3,min:8,max:12,step:5,note:'Nie odchylaj mocno tułowia.'},
+  {name:'Wiosłowanie na maszynie z podparciem klatki', muscle:'Plecy', equipment:'Maszyna', category:'row', imageSrc:'eximg/C3.png', sets:3,min:8,max:12,step:5,note:'Stabilny tułów, łokcie prowadzą ruch.'},
+  {name:'Straight-arm pulldown', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/B2.png', sets:2,min:12,max:15,step:2.5,note:'Ramiona prawie proste, ruch z barku.'},
+
+  {name:'Uginanie młotkowe hantli', muscle:'Biceps', equipment:'Hantle', category:'biceps', imageSrc:'eximg/B6.png', sets:3,min:10,max:15,step:2,note:'Nadgarstki neutralnie.'},
+  {name:'Uginanie ramion na wyciągu', muscle:'Biceps', equipment:'Wyciąg', category:'biceps', imageSrc:'eximg/C8.png', sets:2,min:10,max:15,step:2.5,note:'Bez bujania tułowiem.'},
+  {name:'Uginanie na modlitewniku — maszyna', muscle:'Biceps', equipment:'Maszyna', category:'biceps', imageSrc:'eximg/B6.png', sets:2,min:10,max:15,step:2.5,note:'Pełna kontrola, nie odbijaj na dole.'},
+  {name:'Uginanie hantli siedząc', muscle:'Biceps', equipment:'Hantle', category:'biceps', imageSrc:'eximg/B6.png', sets:2,min:10,max:15,step:2,note:'Nie cofaj barków agresywnie.'},
+
+  {name:'Prostowanie ramion z liną', muscle:'Triceps', equipment:'Wyciąg', category:'triceps', imageSrc:'eximg/B7.png', sets:2,min:10,max:15,step:2.5,note:'Łokcie nieruchomo przy tułowiu.'},
+  {name:'Prostowanie jednorącz na wyciągu', muscle:'Triceps', equipment:'Wyciąg', category:'triceps', imageSrc:'eximg/B7.png', sets:2,min:10,max:15,step:1.25,note:'Lekki ciężar, pełna kontrola.'},
+  {name:'Prostowanie na maszynie triceps', muscle:'Triceps', equipment:'Maszyna', category:'triceps', imageSrc:'eximg/B7.png', sets:2,min:10,max:15,step:2.5,note:'Nie unoś barków do uszu.'},
+
+  {name:'Hip thrust', muscle:'Pośladki', equipment:'Maszyna', category:'hipthrust', imageSrc:'eximg/B3.png', sets:4,min:8,max:12,step:5,note:'Pauza 1 s u góry, napnij pośladki.'},
+  {name:'Glute bridge na maszynie', muscle:'Pośladki', equipment:'Maszyna', category:'hipthrust', imageSrc:'eximg/B3.png', sets:3,min:10,max:15,step:5,note:'Nie przeprostowuj lędźwi.'},
+  {name:'Cable pull-through', muscle:'Pośladki', equipment:'Wyciąg', category:'hinge', imageSrc:'eximg/C5.png', sets:3,min:10,max:15,step:5,note:'Biodra do tyłu, pośladki prowadzą ruch.'},
+  {name:'Martwy ciąg rumuński z hantlami', muscle:'Pośladki', equipment:'Hantle', category:'hinge', imageSrc:'eximg/A4.png', sets:3,min:8,max:10,step:2,note:'Plecy neutralne, biodra do tyłu.'},
+  {name:'Odwodzenie nóg na maszynie', muscle:'Pośladki', equipment:'Maszyna', category:'abduction', imageSrc:'eximg/B3.png', sets:3,min:15,max:20,step:2.5,note:'Bez odbijania ciężaru.'},
+  {name:'Odwodzenie nogi na wyciągu', muscle:'Pośladki', equipment:'Wyciąg', category:'abduction', imageSrc:'eximg/B3.png', sets:3,min:15,max:20,step:1.25,note:'Stabilny tułów, mały kontrolowany ruch.'},
+
+  {name:'Prostowanie nóg na maszynie — obie nogi', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/B4.png', sets:3,min:12,max:15,step:2.5,note:'Płynnie, bez kopania ciężaru.'},
+  {name:'Prostowanie nóg na maszynie — jednonóż', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/C6.png', sets:2,min:15,max:20,step:1.25,note:'Lekko i kontrolowanie.'},
+  {name:'Izometryczne prostowanie kolana na maszynie', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/B4.png', sets:3,min:20,max:40,step:1.25,note:'Czas w sekundach; lekki opór.'},
+
+  {name:'Uginanie nóg siedząc', muscle:'Tył uda', equipment:'Maszyna', category:'legcurl', imageSrc:'eximg/C4.png', sets:3,min:10,max:15,step:2.5,note:'Kontrola i pauza przy zgięciu.'},
+  {name:'Uginanie nóg leżąc', muscle:'Tył uda', equipment:'Maszyna', category:'legcurl', imageSrc:'eximg/C4.png', sets:3,min:10,max:15,step:2.5,note:'Nie odrywaj bioder.'},
+  {name:'Martwy ciąg rumuński z hantlami — tył uda', muscle:'Tył uda', equipment:'Hantle', category:'hinge', imageSrc:'eximg/A4.png', sets:3,min:8,max:10,step:2,note:'Biodra do tyłu, plecy neutralne.'},
+
+  {name:'Wspięcia na palce siedząc', muscle:'Łydki', equipment:'Maszyna', category:'calf', imageSrc:'eximg/C6.png', sets:3,min:12,max:20,step:5,note:'Pauza u góry i pełna kontrola.'},
+  {name:'Wspięcia na palce stojąc na maszynie', muscle:'Łydki', equipment:'Maszyna', category:'calf', imageSrc:'eximg/C6.png', sets:3,min:12,max:20,step:5,note:'Nie odbijaj z dołu.'},
+
+  {name:'Pallof press', muscle:'Core', equipment:'Wyciąg', category:'core', imageSrc:'eximg/C5.png', sets:2,min:10,max:15,step:2.5,note:'Nie pozwól tułowiowi obracać się.'},
+  {name:'Dead bug', muscle:'Core', equipment:'Masa ciała', category:'core', imageSrc:'eximg/C5.png', sets:2,min:8,max:12,step:1,note:'Lędźwie stabilnie, ruch powoli.'},
+  {name:'Deska bokiem', muscle:'Core', equipment:'Masa ciała', category:'core', imageSrc:'eximg/C5.png', sets:2,min:20,max:40,step:1,note:'Czas w sekundach; ciało w jednej linii.'},
+  {name:'Cable crunch', muscle:'Core', equipment:'Wyciąg', category:'core', imageSrc:'eximg/C5.png', sets:2,min:10,max:15,step:2.5,note:'Zginaj tułów, nie ciągnij rękami.'}
+];
+
+function openLibrary(){
+  document.getElementById('libraryModal').classList.add('active');
+  renderLibrary();
+}
+function closeLibrary(){
+  document.getElementById('libraryModal').classList.remove('active');
+}
+function renderLibrary(){
+  const grid=document.getElementById('libraryGrid');
+  if(!grid) return;
+  const q=(document.getElementById('librarySearch')?.value||'').toLowerCase().trim();
+  const muscle=document.getElementById('libraryMuscle')?.value||'';
+  const equipment=document.getElementById('libraryEquipment')?.value||'';
+  const items=EXERCISE_LIBRARY.filter(x=>
+    (!q || (x.name+' '+x.muscle+' '+x.equipment).toLowerCase().includes(q)) &&
+    (!muscle || x.muscle===muscle) &&
+    (!equipment || x.equipment===equipment)
+  );
+  grid.innerHTML='';
+  if(!items.length){
+    grid.innerHTML='<div class="small">Brak wyników dla wybranych filtrów.</div>';
+    return;
+  }
+  items.forEach((x,idx)=>{
+    const div=document.createElement('div');
+    div.className='library-item';
+    const fake={id:'',category:x.category,name:x.name,imageSrc:x.imageSrc};
+    div.innerHTML=`<div class="library-item-top">
+      <div class="library-img">${exerciseGraphicHTML(fake)}</div>
+      <div>
+        <b>${x.name}</b>
+        <div><span class="tag">${x.muscle}</span><span class="tag">${x.equipment}</span><span class="tag">${x.sets} × ${x.min}–${x.max}</span></div>
+        <div class="tiny" style="margin-top:5px">${x.note}</div>
+        <button class="btn primary" data-lib-add="${idx}" style="margin-top:8px;padding:8px 10px">Dodaj do dnia ${selectedPlanDay}</button>
+      </div>
+    </div>`;
+    grid.appendChild(div);
+  });
+  grid.querySelectorAll('[data-lib-add]').forEach(btn=>btn.onclick=()=>{
+    const x=items[Number(btn.dataset.libAdd)];
+    const id=selectedPlanDay+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    data.plan[selectedPlanDay].push({id,category:x.category,name:x.name,sets:x.sets,min:x.min,max:x.max,step:x.step,note:x.note,imageSrc:x.imageSrc});
+    save(); draft={}; renderPlanEditor(); renderWorkout();
+    btn.textContent='✓ Dodano'; btn.disabled=true;
+  });
+}
+
+const LS='gymProgressDataV4';
+let data = JSON.parse(localStorage.getItem(LS) || '{"workouts":[],"weights":[],"measures":[],"plan":null}');
+if(!Array.isArray(data.workouts)) data.workouts=[];
+if(!Array.isArray(data.weights)) data.weights=[];
+if(!Array.isArray(data.measures)) data.measures=[];
+if(!data.plan) data.plan = structuredClone(DEFAULT_PLAN);
+let selectedDay='A';
+let selectedPlanDay='A';
+let draft={};
+
+function save(){ localStorage.setItem(LS, JSON.stringify(data)); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+weightDate.value=todayISO(); measureDate.value=todayISO();
+
+function currentPlan(){ return data.plan || structuredClone(DEFAULT_PLAN); }
+
+function normalizeDayPlan(dayArr){
+  return dayArr.map((x,i)=>({
+    id: x.id || ('X'+(i+1)+'_'+Math.random().toString(36).slice(2,6)),
+    category: x.category || 'other',
+    name: x.name || 'Ćwiczenie',
+    sets: Number(x.sets)||3,
+    min: Number(x.min)||8,
+    max: Number(x.max)||12,
+    step: Number(x.step)||2,
+    note: x.note || ''
+  }));
+}
+
+function graphicSVG(cat){
+  const base = (inner) => `<svg viewBox="0 0 120 120" width="110" height="110" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="120" height="120" rx="16" fill="#091525"/>
+    <g stroke="#dcecff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">${inner}</g>
+    <g fill="#f2b84b">${cat==='press'||cat==='row'||cat==='hinge'||cat==='hipthrust'||cat==='fly'||cat==='rear'||cat==='pulldown'||cat==='triceps'||cat==='biceps'||cat==='legcurl'||cat==='legext'||cat==='latraise' ? '<circle cx="60" cy="22" r="8"/>' : ''}</g>
+  </svg>`;
+  const m = {
+    press: base(`<path d="M40 38 L80 38"/><path d="M60 30 L60 56"/><path d="M60 30 L46 46"/><path d="M60 30 L74 46"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><rect x="28" y="74" width="64" height="6" rx="3" fill="#dcecff" stroke="none"/><path d="M24 70 L24 84"/><path d="M96 70 L96 84"/><path d="M20 68 L28 68"/><path d="M92 68 L100 68"/>`),
+    fly: base(`<path d="M60 30 L60 56"/><path d="M60 30 L42 48"/><path d="M60 30 L78 48"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><path d="M18 32 C35 46, 42 50, 52 56"/><path d="M102 32 C85 46, 78 50, 68 56"/><circle cx="18" cy="32" r="3" fill="#59c3ff" stroke="none"/><circle cx="102" cy="32" r="3" fill="#59c3ff" stroke="none"/>`),
+    row: base(`<path d="M60 30 L60 56"/><path d="M60 30 L46 48"/><path d="M60 30 L74 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M46 48 L30 54"/><path d="M74 44 L90 48"/><rect x="86" y="44" width="10" height="8" rx="2" fill="#59c3ff" stroke="none"/>`),
+    hinge: base(`<path d="M60 30 L60 58"/><path d="M60 42 L42 48"/><path d="M60 58 L44 80"/><path d="M60 58 L70 84"/><path d="M42 48 L24 54"/><rect x="18" y="50" width="10" height="10" rx="2" fill="#59c3ff" stroke="none"/>`),
+    hipthrust: base(`<path d="M34 72 L58 72"/><path d="M58 72 L78 58"/><path d="M78 58 L92 58"/><path d="M58 72 L58 90"/><path d="M42 72 L42 90"/><rect x="48" y="46" width="36" height="8" rx="4" fill="#59c3ff" stroke="none"/><circle cx="28" cy="72" r="3" fill="#dcecff" stroke="none"/>`),
+    legext: base(`<path d="M56 28 L56 54"/><path d="M56 54 L56 76"/><path d="M56 54 L82 54"/><path d="M82 54 L96 44"/><rect x="28" y="72" width="24" height="8" rx="4" fill="#dcecff" stroke="none"/><rect x="82" y="42" width="16" height="8" rx="4" fill="#59c3ff" stroke="none"/><path d="M56 30 L44 44"/>`),
+    legcurl: base(`<path d="M36 54 L62 54"/><path d="M62 54 L78 54"/><path d="M78 54 L92 44"/><path d="M62 54 L54 80"/><rect x="82" y="42" width="14" height="8" rx="4" fill="#59c3ff" stroke="none"/><rect x="24" y="52" width="14" height="6" rx="3" fill="#dcecff" stroke="none"/>`),
+    latraise: base(`<path d="M60 30 L60 56"/><path d="M60 30 L34 44"/><path d="M60 30 L86 44"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><circle cx="30" cy="42" r="4" fill="#59c3ff" stroke="none"/><circle cx="90" cy="42" r="4" fill="#59c3ff" stroke="none"/>`),
+    rear: base(`<path d="M60 30 L60 56"/><path d="M60 30 L44 44"/><path d="M60 30 L76 44"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/><path d="M44 44 L24 36"/><path d="M76 44 L96 36"/><circle cx="22" cy="36" r="4" fill="#59c3ff" stroke="none"/><circle cx="98" cy="36" r="4" fill="#59c3ff" stroke="none"/>`),
+    pulldown: base(`<path d="M22 22 L98 22"/><path d="M60 30 L60 56"/><path d="M60 30 L44 44"/><path d="M60 30 L76 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M40 34 L46 44"/><path d="M80 34 L74 44"/>`),
+    triceps: base(`<path d="M60 30 L60 56"/><path d="M60 30 L48 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M48 44 L48 62"/><circle cx="48" cy="66" r="4" fill="#59c3ff" stroke="none"/>`),
+    biceps: base(`<path d="M60 30 L60 56"/><path d="M60 30 L46 44"/><path d="M60 56 L50 84"/><path d="M60 56 L70 84"/><path d="M46 44 L38 54"/><path d="M38 54 L48 62"/><circle cx="48" cy="62" r="4" fill="#59c3ff" stroke="none"/>`),
+    other: base(`<path d="M60 30 L60 56"/><path d="M60 30 L44 44"/><path d="M60 30 L76 44"/><path d="M60 56 L48 84"/><path d="M60 56 L72 84"/>`)
+  };
+  return m[cat] || m.other;
+}
+
+function getLastExercise(day, targetEx, idx){
+  for(let i=data.workouts.length-1;i>=0;i--){
+    const w=data.workouts[i];
+    if(w.day!==day) continue;
+    let ex = w.exercises.find(x=>x.id===targetEx.id);
+    if(!ex) ex = w.exercises.find(x=>x.name===targetEx.name);
+    if(!ex && typeof idx==='number') ex = w.exercises[idx];
+    if(ex) return {date:w.date, ex};
+  }
+  return null;
+}
+
+function renderWorkout(){
+  const box=document.getElementById('workoutList'); box.innerHTML='';
+  const plan = currentPlan()[selectedDay];
+  plan.forEach((ex,idx)=>{
+    const last=getLastExercise(selectedDay, ex, idx);
+    const dkey=selectedDay+'_'+ex.id;
+    if(!draft[dkey]){
+      draft[dkey]={weight:last?.ex?.weight ?? '', reps:Array(ex.sets).fill('').map((_,i)=>last?.ex?.reps?.[i] ?? ''), rir:Array(ex.sets).fill(2).map((_,i)=>last?.ex?.rir?.[i] ?? 2)};
+    } else {
+      // match current number of sets after edit
+      draft[dkey].reps = Array(ex.sets).fill('').map((_,i)=>draft[dkey].reps[i] ?? last?.ex?.reps?.[i] ?? '');
+      draft[dkey].rir = Array(ex.sets).fill(2).map((_,i)=>draft[dkey].rir[i] ?? last?.ex?.rir?.[i] ?? 2);
+      if(draft[dkey].weight==='' && last?.ex?.weight) draft[dkey].weight = last.ex.weight;
+    }
+    const d=draft[dkey];
+    const wrap=document.createElement('div'); wrap.className='exercise';
+    let lastTxt=last ? `Ostatni ${selectedDay}: ${new Date(last.date).toLocaleDateString('pl-PL')} • ${last.ex.weight||'—'} kg • powt. ${last.ex.reps.join(' / ')}${last.ex.rir ? ' • RIR ' + last.ex.rir.join(' / ') : ''}` : `Brak poprzedniego wyniku dla dnia ${selectedDay}`;
+    let rows='';
+    for(let s=0;s<ex.sets;s++){
+      rows += `<div class="set-grid">
+        <div class="set-num">${s+1}</div>
+        <input data-role="weight" data-id="${dkey}" type="number" step="0.5" value="${d.weight}" placeholder="kg">
+        <input data-role="reps" data-id="${dkey}" data-set="${s}" type="number" min="0" value="${d.reps[s]}" placeholder="powt.">
+        <input data-role="rir" data-id="${dkey}" data-set="${s}" type="number" min="0" max="6" value="${d.rir[s]}" placeholder="RIR">
+      </div>`;
+    }
+    wrap.innerHTML = `<div class="exercise-top">
+        <div class="ex-graphic">${exerciseGraphicHTML(ex)}</div>
+        <div><div class="ex-title">${idx+1}. ${ex.name}</div><div class="ex-meta">${ex.sets} × ${ex.min}–${ex.max} • ${ex.note}</div><div class="zoom-hint">Stuknij obrazek, aby powiększyć.</div>
+        <div class="tiny" style="margin-top:7px">${lastTxt}</div><div class="last-fill">Domyślnie podstawione są ostatnie serie / kg / RIR z poprzedniego treningu tego samego dnia planu.</div></div>
+      </div>
+      <div class="set-grid head"><div>Seria</div><div>kg</div><div>Powt.</div><div>RIR</div></div>${rows}
+      <div id="status_${dkey}" class="status warn">Wpisz serie, aby zobaczyć sugestię progresji.</div>`;
+    box.appendChild(wrap);
+    updateStatus(ex,dkey);
+  });
+  box.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input',e=>{
+      const id=e.target.dataset.id;
+      if(e.target.dataset.role==='weight'){
+        draft[id].weight=parseFloat(e.target.value)||'';
+        box.querySelectorAll(`input[data-role="weight"][data-id="${id}"]`).forEach(i=>{ if(i!==e.target) i.value=e.target.value; });
+      } else {
+        const s=+e.target.dataset.set;
+        draft[id][e.target.dataset.role][s]=parseFloat(e.target.value)||0;
+      }
+      const exId=id.split('_').slice(1).join('_');
+      const ex=currentPlan()[selectedDay].find(x=>x.id===exId); updateStatus(ex,id);
+    });
+  });
+}
+
+function updateStatus(ex,dkey){
+  const el=document.getElementById('status_'+dkey); if(!el) return;
+  const d=draft[dkey]; if(!d){el.className='status warn'; el.textContent='Brak danych.'; return;}
+  const reps=d.reps.map(Number);
+  if(reps.some(r=>!r)){ el.className='status warn'; el.textContent='Wpisz wszystkie serie.'; return; }
+  const allTop=reps.every(r=>r>=ex.max);
+  const allIn=reps.every(r=>r>=ex.min && r<=ex.max+5);
+  if(allTop){
+    const w=Number(d.weight)||0; const next=w ? (w+ex.step).toFixed(ex.step<2?1:0) : 'więcej';
+    el.className='status good'; el.textContent=`✅ Górny zakres osiągnięty. Jeśli bark i kolano są spokojne, następnym razem spróbuj ok. ${next} kg.`;
+  } else if(allIn){
+    el.className='status good'; el.textContent='✅ Dobry zakres. Zostaw ten sam ciężar i dobijaj powtórzenia.';
+  } else {
+    el.className='status warn'; el.textContent='⚠️ Poza zakresem. Nie zwiększaj ciężaru, dopóki serie nie mieszczą się w celu.';
+  }
+}
+
+document.querySelectorAll('.seg button[data-day]').forEach(b=>b.onclick=()=>{ selectedDay=b.dataset.day; document.querySelectorAll('.seg button[data-day]').forEach(x=>x.classList.toggle('active',x===b)); renderWorkout(); });
+
+saveWorkout.onclick=()=>{
+  const painS=+shoulderPain.value||0, painK=+kneePain.value||0, swelling=kneeSwelling.checked;
+  const exercises=currentPlan()[selectedDay].map(ex=>{
+    const d=draft[selectedDay+'_'+ex.id];
+    return {id:ex.id,name:ex.name,weight:Number(d?.weight)||0,reps:(d?.reps||[]).map(Number),rir:(d?.rir||[]).map(Number),min:ex.min,max:ex.max};
+  });
+  if(exercises.some(x=>x.reps.some(r=>!r))){ alert('Uzupełnij wszystkie powtórzenia albo wpisz 0, jeśli serię pominąłeś.'); return; }
+  data.workouts.push({date:new Date().toISOString(), day:selectedDay, exercises, shoulderPain:painS, kneePain:painK, kneeSwelling:swelling, note:workoutNote.value.trim()});
+  save(); draft={}; shoulderPain.value=0;kneePain.value=0;kneeSwelling.checked=false;workoutNote.value='';
+  renderWorkout(); renderHistory(); alert('Trening zapisany i dodany do historii.');
+};
+
+function renderPlanEditor(){
+  const root = document.getElementById('planEditor');
+  root.innerHTML='';
+  const planDay = currentPlan()[selectedPlanDay];
+  planDay.forEach((ex,idx)=>{
+    const div=document.createElement('div');
+    div.className='editor-item';
+    div.innerHTML=`
+      <div class="row between" style="margin-bottom:10px">
+        <b>${idx+1}. Ćwiczenie</b>
+        <button class="btn bad" data-remove="${ex.id}" style="padding:8px 10px">Usuń</button>
+      </div>
+      <div class="editor-preview" style="margin-bottom:10px">
+        <div class="ex-graphic" style="width:120px;height:120px">${exerciseGraphicHTML(ex)}</div>
+        <div style="flex:1">
+          <label class="tiny">Nazwa</label>
+          <input data-field="name" data-id="${ex.id}" value="${escapeHtml(ex.name)}">
+        </div>
+      </div>
+      <div class="grid4">
+        <div><label class="tiny">Kategoria grafiki</label>
+          <select data-field="category" data-id="${ex.id}">
+            ${['press','fly','row','hinge','hipthrust','legext','legcurl','latraise','rear','pulldown','triceps','biceps','other'].map(c=>`<option value="${c}" ${ex.category===c?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div><label class="tiny">Serie</label><input data-field="sets" data-id="${ex.id}" type="number" min="1" max="8" value="${ex.sets}"></div>
+        <div><label class="tiny">Min powt.</label><input data-field="min" data-id="${ex.id}" type="number" min="1" max="30" value="${ex.min}"></div>
+        <div><label class="tiny">Max powt.</label><input data-field="max" data-id="${ex.id}" type="number" min="1" max="40" value="${ex.max}"></div>
+      </div>
+      <div class="grid2" style="margin-top:8px">
+        <div><label class="tiny">Skok ciężaru</label><input data-field="step" data-id="${ex.id}" type="number" min="0.5" step="0.5" value="${ex.step}"></div>
+        <div><label class="tiny">Notatka techniczna</label><input data-field="note" data-id="${ex.id}" value="${escapeHtml(ex.note)}"></div>
+      </div>`;
+    root.appendChild(div);
+  });
+
+  root.querySelectorAll('input,select').forEach(inp=>inp.addEventListener('input',e=>{
+    const ex = currentPlan()[selectedPlanDay].find(x=>x.id===e.target.dataset.id);
+    const f=e.target.dataset.field;
+    if(['sets','min','max','step'].includes(f)) ex[f]=Number(e.target.value)||ex[f];
+    else ex[f]=e.target.value;
+    save();
+    if(f==='category') renderPlanEditor();
+    renderWorkout();
+  }));
+
+  root.querySelectorAll('button[data-remove]').forEach(btn=>btn.onclick=()=>{
+    const id=btn.dataset.remove;
+    data.plan[selectedPlanDay]=data.plan[selectedPlanDay].filter(x=>x.id!==id);
+    save(); renderPlanEditor(); renderWorkout();
+  });
+}
+document.querySelectorAll('.seg button[data-plan-day]').forEach(b=>b.onclick=()=>{ selectedPlanDay=b.dataset.planDay; document.querySelectorAll('.seg button[data-plan-day]').forEach(x=>x.classList.toggle('active',x===b)); renderPlanEditor(); if(document.getElementById('libraryModal')?.classList.contains('active')) renderLibrary(); });
+document.getElementById('openLibraryBtn').onclick=openLibrary;
+document.getElementById('closeLibraryBtn').onclick=closeLibrary;
+document.getElementById('librarySearch').oninput=renderLibrary;
+document.getElementById('libraryMuscle').onchange=renderLibrary;
+document.getElementById('libraryEquipment').onchange=renderLibrary;
+document.getElementById('addExerciseBtn').onclick=()=>{
+  const id=selectedPlanDay+'_'+Date.now().toString(36);
+  data.plan[selectedPlanDay].push({id,category:'other',name:'Nowe ćwiczenie',sets:3,min:8,max:12,step:2,note:'',imageSrc:''});
+  save(); renderPlanEditor(); renderWorkout();
+};
+document.getElementById('resetPlan').onclick=()=>{
+  if(confirm('Przywrócić domyślny plan?')){ data.plan=structuredClone(DEFAULT_PLAN); save(); draft={}; renderPlanEditor(); renderWorkout(); }
+};
+
+function renderBody(){
+  const ws=data.weights;
+  lastWeight.textContent=ws.length?ws[ws.length-1].value.toFixed(1)+' kg':'—';
+  const a7=avg(ws.slice(-7).map(x=>x.value)); avg7.textContent=a7? a7.toFixed(2)+' kg':'—';
+  drawWeightChart();
+  if(ws.length>=14){
+    const prev=avg(ws.slice(-14,-7).map(x=>x.value)), cur=avg(ws.slice(-7).map(x=>x.value)), diff=cur-prev;
+    const lastM=data.measures[data.measures.length-1], prevM=data.measures[data.measures.length-2];
+    const waistGrowing=lastM?.waist && prevM?.waist && lastM.waist>prevM.waist+0.4;
+    if(diff>0.3 && waistGrowing){ weightTrend.className='status bad'; weightTrend.textContent=`⚠️ Średnia wzrosła o ${diff.toFixed(2)} kg/tydz. i pas rośnie. Rozważ −100 kcal.`; }
+    else if(diff<0.02){ weightTrend.className='status warn'; weightTrend.textContent=`Średnia praktycznie stoi (${diff.toFixed(2)} kg/tydz.). Jeśli tak będzie przez 2 tygodnie, rozważ +100 kcal.`; }
+    else { weightTrend.className='status good'; weightTrend.textContent=`✅ Zmiana średniej: ${diff>=0?'+':''}${diff.toFixed(2)} kg/tydz.`; }
+  } else { weightTrend.className='status warn'; weightTrend.textContent='Dodaj co najmniej 14 pomiarów, aby ocenić tempo tydzień do tygodnia.'; }
+
+  measureList.innerHTML='';
+  [...data.measures].reverse().forEach(m=>{
+    const div=document.createElement('div'); div.className='hist';
+    div.innerHTML=`<b>${new Date(m.date+'T12:00').toLocaleDateString('pl-PL')}</b><div class="small">Pas: ${m.waist??'—'} cm • Klatka: ${m.chest??'—'} cm • Biceps L: ${m.bicepsL??'—'} cm • P: ${m.bicepsR??'—'} cm</div>`;
+    measureList.appendChild(div);
+  });
+}
+
+function renderHistory(){
+  const root=document.getElementById('historyList');
+  const count=document.getElementById('historyCount');
+  if(!root) return;
+  const workouts=Array.isArray(data.workouts)?data.workouts:[];
+  if(count) count.textContent=`${workouts.length} ${workouts.length===1?'trening':'treningów'}`;
+  root.innerHTML='';
+  if(!workouts.length){
+    root.innerHTML='<div class="card"><div class="small">Nie ma jeszcze zapisanych treningów. Po kliknięciu „Zapisz trening” wpis pojawi się tutaj.</div></div>';
+    return;
+  }
+  [...workouts].map((w,i)=>({w,i})).reverse().forEach(({w,i})=>{
+    const d=new Date(w.date);
+    const dateText=isNaN(d.getTime())?String(w.date||'—'):d.toLocaleString('pl-PL',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const painClass=(Number(w.shoulderPain)>3 || Number(w.kneePain)>3 || w.kneeSwelling)?'bad':'good';
+    const totalSets=(w.exercises||[]).reduce((s,x)=>s+(Array.isArray(x.reps)?x.reps.length:0),0);
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`
+      <div class="row between wrap">
+        <div>
+          <h3 style="margin-bottom:3px">Trening ${escapeHtml(w.day||'?')}</h3>
+          <div class="small">${escapeHtml(dateText)} • ${totalSets} serii</div>
+        </div>
+        <button class="btn bad" data-delete-workout="${i}" style="padding:8px 10px">Usuń</button>
+      </div>
+      <div class="status ${painClass}" style="margin-top:10px">
+        Bark: <b>${Number(w.shoulderPain)||0}/10</b> • Kolano: <b>${Number(w.kneePain)||0}/10</b>${w.kneeSwelling?' • <b>obrzęk</b>':''}
+      </div>
+      <div class="list" style="margin-top:10px">
+        ${(w.exercises||[]).map(ex=>{
+          const reps=Array.isArray(ex.reps)?ex.reps:[];
+          const rir=Array.isArray(ex.rir)?ex.rir:[];
+          return `<div class="hist">
+            <div class="row between wrap"><b>${escapeHtml(ex.name||'Ćwiczenie')}</b><span class="pill">${Number(ex.weight)||0} kg</span></div>
+            <div class="small" style="margin-top:5px">Powtórzenia: <b>${reps.map(Number).join(' / ') || '—'}</b></div>
+            <div class="tiny" style="margin-top:3px">RIR: ${rir.length?rir.map(Number).join(' / '):'—'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      ${w.note?`<div class="note" style="margin-top:10px">📝 ${escapeHtml(w.note)}</div>`:''}
+    `;
+    root.appendChild(card);
+  });
+  root.querySelectorAll('[data-delete-workout]').forEach(btn=>btn.onclick=()=>{
+    const idx=Number(btn.dataset.deleteWorkout);
+    if(confirm('Usunąć ten trening z historii?')){
+      data.workouts.splice(idx,1);
+      save();
+      renderHistory();
+    }
+  });
+}
+
+function sortByDate(a,b){ return a.date.localeCompare(b.date); }
+function avg(arr){ return arr.length?arr.reduce((s,x)=>s+x,0)/arr.length:null; }
+function escapeHtml(v){ return String(v).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'); }
+
+addWeight.onclick=()=>{
+  const date=weightDate.value, value=parseFloat(weightValue.value);
+  if(!date||!value) return;
+  data.weights=data.weights.filter(x=>x.date!==date);
+  data.weights.push({date,value}); data.weights.sort(sortByDate); save(); weightValue.value=''; renderBody();
+};
+
+addMeasure.onclick=()=>{
+  const date=measureDate.value; if(!date) return;
+  const m={date, waist:+waist.value||null, chest:+chest.value||null, bicepsL:+bicepsL.value||null, bicepsR:+bicepsR.value||null};
+  data.measures=data.measures.filter(x=>x.date!==date); data.measures.push(m); data.measures.sort(sortByDate); save();
+  waist.value=chest.value=bicepsL.value=bicepsR.value=''; renderBody();
+};
+
+function drawWeightChart(){
+  const c=weightChart, ctx=c.getContext('2d'), pts=data.weights.slice(-30); ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle='#091525';ctx.fillRect(0,0,c.width,c.height);
+  if(pts.length<2){ctx.fillStyle='#9bb0ca';ctx.font='14px sans-serif';ctx.fillText('Dodaj co najmniej 2 pomiary.',20,40);return;}
+  const vals=pts.map(p=>p.value), min=Math.min(...vals)-0.4,max=Math.max(...vals)+0.4;
+  const pad=36,w=c.width-pad*2,h=c.height-pad*2;
+  ctx.strokeStyle='#243a57';ctx.lineWidth=1;
+  for(let i=0;i<4;i++){let y=pad+i*h/3;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(c.width-pad,y);ctx.stroke();}
+  function xy(i,v){return [pad+i*w/(pts.length-1), pad+(max-v)*h/(max-min)];}
+  ctx.strokeStyle='#59c3ff';ctx.lineWidth=3;ctx.beginPath();
+  pts.forEach((p,i)=>{const [x,y]=xy(i,p.value);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();
+  ctx.fillStyle='#f2b84b';pts.forEach((p,i)=>{const [x,y]=xy(i,p.value);ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();});
+  if(pts.length>=7){
+    const avgs=pts.map((_,i)=>i<6?null:avg(pts.slice(i-6,i+1).map(x=>x.value)));
+    ctx.strokeStyle='#58d68d';ctx.lineWidth=2;ctx.beginPath();let started=false;
+    avgs.forEach((v,i)=>{if(v==null)return;const [x,y]=xy(i,v);if(!started){ctx.moveTo(x,y);started=true}else ctx.lineTo(x,y)});ctx.stroke();
+  }
+  ctx.fillStyle='#9bb0ca';ctx.font='12px sans-serif';ctx.fillText(max.toFixed(1)+' kg',5,pad+4);ctx.fillText(min.toFixed(1)+' kg',5,pad+h);
+}
+
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(t.dataset.view).classList.add('active');
+  if(t.dataset.view==='body') renderBody();
+  if(t.dataset.view==='plan') renderPlanEditor();
+  if(t.dataset.view==='history') renderHistory();
+});
+
+exportData.onclick=()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='gym-progress-backup.json';a.click();URL.revokeObjectURL(url);
+};
+importData.onchange=async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{ 
+    const parsed=JSON.parse(await f.text()); 
+    data=parsed; 
+    if(!data.plan) data.plan=structuredClone(DEFAULT_PLAN);
+    save(); 
+    draft={};
+    renderPlanEditor();renderBody();renderWorkout();renderHistory();alert('Dane zaimportowane.'); 
+  }catch(err){alert('Nieprawidłowy plik JSON.');}
+};
+resetData.onclick=()=>{if(confirm('Na pewno usunąć wszystkie dane?')){data={workouts:[],weights:[],measures:[],plan:structuredClone(DEFAULT_PLAN)};save();draft={};renderWorkout();renderBody();renderPlanEditor();renderHistory();}};
+
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.style.display='inline-block';});
+installBtn.onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.style.display='none';};
+
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
+
+save();
+document.addEventListener('click',e=>{const z=e.target.closest('[data-zoom]'); if(z) openModal(z.dataset.zoom);});
+document.getElementById('closeModal').onclick=closeModal;
+document.getElementById('imgModal').addEventListener('click',e=>{ if(e.target.id==='imgModal') closeModal(); });
+document.getElementById('libraryModal').addEventListener('click',e=>{ if(e.target.id==='libraryModal') closeLibrary(); });
+renderWorkout(); renderPlanEditor(); renderBody(); renderHistory();
