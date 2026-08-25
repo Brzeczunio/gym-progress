@@ -89,6 +89,15 @@
     .modal-panel{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:14px;width:min(760px,100%);max-height:90vh;overflow:hidden;box-shadow:var(--shadow)}
     .modal-panel h3{margin:0 0 10px}
 
+
+    .diet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .diet-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .diet-meal-editor{border:1px solid var(--line);border-radius:14px;padding:12px;background:#0b192b;margin-top:10px}
+    .diet-meal-editor .row{align-items:flex-start}
+    .diet-meal-editor textarea{min-height:118px;resize:vertical}
+    .diet-editor-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+    .diet-empty{padding:14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:12px}
+
     @media (max-width:580px){
       .library-tools{grid-template-columns:1fr}
       .library-item-top{grid-template-columns:118px minmax(0,1fr)}
@@ -101,6 +110,8 @@
       .ex-graphic img{width:90%;height:90%;max-width:90%;max-height:90%;object-position:center center}
       .grid4,.grid3,.grid2{grid-template-columns:1fr}
       .kpi{grid-template-columns:1fr 1fr}
+      .diet-editor-grid{grid-template-columns:1fr}
+      .diet-editor-actions{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -111,7 +122,7 @@
       <div class="logo">GP</div>
       <div>
         <h1>Gym Progress</h1>
-        <div class="sub">Lepsze grafiki ćwiczeń • edycja planu • progresja • masa • dieta</div>
+        <div class="sub">Trening • Plan • Progres • Masa • Dieta</div>
       </div>
     </div>
   </header>
@@ -220,26 +231,48 @@
 
     <section id="diet" class="view">
       <div class="card">
-        <h2>Dieta low carb — punkt startowy</h2>
-        <div class="kpi">
-          <div class="box"><div class="l">Kalorie</div><div class="v">2250–2300</div></div>
-          <div class="box"><div class="l">Białko</div><div class="v">150–160 g</div></div>
-          <div class="box"><div class="l">Węglowodany</div><div class="v">130–150 g</div></div>
-          <div class="box"><div class="l">Tłuszcze</div><div class="v">115–125 g</div></div>
+        <div class="diet-head">
+          <div>
+            <h2 style="margin-bottom:4px">Dieta</h2>
+            <div class="small">Twój aktualny plan żywieniowy zapisany lokalnie w aplikacji.</div>
+          </div>
+          <button id="editDietBtn" class="btn primary">Edytuj dietę</button>
         </div>
-        <div class="note" style="margin-top:12px">Cel: powolny wzrost średniej masy około <b>0,1–0,2 kg/tydzień</b>. Jeśli przez 2 tygodnie średnia stoi — +100 kcal. Jeśli rośnie zbyt szybko i pas rośnie — −100 kcal.</div>
+        <div id="dietMacroSummary" class="kpi" style="margin-top:12px"></div>
+        <div id="dietGoal" class="note" style="margin-top:12px"></div>
       </div>
 
-      <div class="card">
-        <div class="meal"><div class="time">12:00</div><div><b>Posiłek 1</b><ul class="clean">
-          <li>4 jajka</li><li>Serek wiejski 150 g</li><li>Warzywa mrożone 300 g</li><li>Oliwa 15 g</li><li>Maliny / truskawki / borówki 100 g</li>
-        </ul></div></div>
-        <div class="meal"><div class="time">16:00</div><div><b>Posiłek 2</b><ul class="clean">
-          <li>Kurczak albo indyk 200 g</li><li>Ryż 60 g — masa sucha</li><li>Warzywa mrożone 300 g</li><li>Oliwa 25 g</li>
-        </ul></div></div>
-        <div class="meal"><div class="time">19:30</div><div><b>Posiłek 3</b><ul class="clean">
-          <li>Twaróg półtłusty 150 g</li><li>Orzechy 50 g</li><li>Masło orzechowe 30 g</li><li>Maliny / truskawki 150 g</li>
-        </ul></div></div>
+      <div id="dietMeals"></div>
+
+      <div id="dietEditorCard" class="card" style="display:none">
+        <div class="row between wrap">
+          <div>
+            <h2 style="margin-bottom:4px">Edycja diety</h2>
+            <div class="small">Możesz zmienić makro, cel oraz dowolnie edytować posiłki.</div>
+          </div>
+          <button id="resetDietBtn" class="btn ghost">Przywróć bazową dietę</button>
+        </div>
+
+        <div class="diet-editor-grid" style="margin-top:12px">
+          <div><label class="small">Kalorie</label><input id="dietCalories" type="text" placeholder="np. 2250–2300 kcal"></div>
+          <div><label class="small">Białko</label><input id="dietProtein" type="text" placeholder="np. 150–160 g"></div>
+          <div><label class="small">Węglowodany</label><input id="dietCarbs" type="text" placeholder="np. 130–150 g"></div>
+          <div><label class="small">Tłuszcze</label><input id="dietFat" type="text" placeholder="np. 115–125 g"></div>
+        </div>
+        <div style="margin-top:10px">
+          <label class="small">Cel / notatka do diety</label>
+          <textarea id="dietGoalInput" rows="3" placeholder="Np. cel masy, zasady korekty kalorii..."></textarea>
+        </div>
+
+        <h3 style="margin:16px 0 4px">Posiłki</h3>
+        <div class="small">Każdy składnik wpisz w osobnej linii.</div>
+        <div id="dietMealsEditor"></div>
+        <button id="addDietMealBtn" class="btn ghost" style="width:100%;margin-top:10px">+ Dodaj posiłek</button>
+
+        <div class="diet-editor-actions">
+          <button id="saveDietBtn" class="btn primary">Zapisz dietę</button>
+          <button id="cancelDietBtn" class="btn ghost">Anuluj</button>
+        </div>
       </div>
     </section>
 
@@ -267,7 +300,7 @@
       
       <div class="card">
         <h3>Wersja aplikacji</h3>
-        <div class="small"><b>Gym Progress v36</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
+        <div class="small"><b>Gym Progress v37</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
       </div>
 
       <div class="footer-note">To narzędzie do logowania treningu, nie diagnoza ani zastępstwo konsultacji medycznej.</div>
@@ -400,7 +433,7 @@ const IMAGE_BY_NAME = {
   'Wspięcia na palce siedząc':'eximg/seated_calf.png',
   'Pallof press':'eximg/pallof_press.png'
 };
-const IMAGE_ASSET_VERSION = '36';
+const IMAGE_ASSET_VERSION = '37';
 function versionedImageSrc(src){
   if(!src || src.startsWith('data:')) return src;
   return src + (src.includes('?') ? '&' : '?') + 'v=' + IMAGE_ASSET_VERSION;
@@ -495,12 +528,27 @@ function renderLibrary(){
   });
 }
 
+const DEFAULT_DIET = {
+  calories:'2250–2300 kcal',
+  protein:'150–160 g',
+  carbs:'130–150 g',
+  fat:'115–125 g',
+  goal:'Cel: powolny wzrost średniej masy około 0,1–0,2 kg/tydzień. Jeśli przez 2 tygodnie średnia stoi — +100 kcal. Jeśli rośnie zbyt szybko i pas rośnie — −100 kcal.',
+  meals:[
+    {time:'12:00', name:'Posiłek 1', items:['4 jajka','Serek wiejski 150 g','Warzywa mrożone 300 g','Oliwa 15 g','Maliny / truskawki / borówki 100 g']},
+    {time:'16:00', name:'Posiłek 2', items:['Kurczak albo indyk 200 g','Ryż 60 g — masa sucha','Warzywa mrożone 300 g','Oliwa 25 g']},
+    {time:'19:30', name:'Posiłek 3', items:['Twaróg półtłusty 150 g','Orzechy 50 g','Masło orzechowe 30 g','Maliny / truskawki 150 g']}
+  ]
+};
+
 const LS='gymProgressDataV4';
 let data = JSON.parse(localStorage.getItem(LS) || '{"workouts":[],"weights":[],"measures":[],"plan":null}');
 if(!Array.isArray(data.workouts)) data.workouts=[];
 if(!Array.isArray(data.weights)) data.weights=[];
 if(!Array.isArray(data.measures)) data.measures=[];
 if(!data.plan) data.plan = structuredClone(DEFAULT_PLAN);
+if(!data.diet || typeof data.diet!=='object') data.diet = structuredClone(DEFAULT_DIET);
+if(!Array.isArray(data.diet.meals)) data.diet.meals = structuredClone(DEFAULT_DIET.meals);
 let selectedDay='A';
 let selectedPlanDay='A';
 let draft={};
@@ -762,6 +810,124 @@ function renderBody(){
   }
 }
 
+
+let dietEditDraft=null;
+
+function ensureDietShape(d){
+  const src=d && typeof d==='object' ? d : {};
+  return {
+    calories:String(src.calories || DEFAULT_DIET.calories),
+    protein:String(src.protein || DEFAULT_DIET.protein),
+    carbs:String(src.carbs || DEFAULT_DIET.carbs),
+    fat:String(src.fat || DEFAULT_DIET.fat),
+    goal:String(src.goal || DEFAULT_DIET.goal),
+    meals:Array.isArray(src.meals) ? src.meals.map((m,i)=>({
+      time:String(m?.time || ''),
+      name:String(m?.name || `Posiłek ${i+1}`),
+      items:Array.isArray(m?.items) ? m.items.map(String) : []
+    })) : structuredClone(DEFAULT_DIET.meals)
+  };
+}
+
+function renderDiet(){
+  data.diet=ensureDietShape(data.diet);
+  const d=data.diet;
+  const macro=document.getElementById('dietMacroSummary');
+  const goal=document.getElementById('dietGoal');
+  const meals=document.getElementById('dietMeals');
+  if(macro) macro.innerHTML=`
+    <div class="box"><div class="l">Kalorie</div><div class="v">${escapeHtml(d.calories)}</div></div>
+    <div class="box"><div class="l">Białko</div><div class="v">${escapeHtml(d.protein)}</div></div>
+    <div class="box"><div class="l">Węglowodany</div><div class="v">${escapeHtml(d.carbs)}</div></div>
+    <div class="box"><div class="l">Tłuszcze</div><div class="v">${escapeHtml(d.fat)}</div></div>`;
+  if(goal) goal.textContent=d.goal || '—';
+  if(meals){
+    meals.innerHTML='';
+    if(!d.meals.length){
+      meals.innerHTML='<div class="card"><div class="diet-empty">Brak posiłków. Kliknij „Edytuj dietę”, aby dodać pierwszy.</div></div>';
+    } else {
+      d.meals.forEach((m,idx)=>{
+        const card=document.createElement('div'); card.className='card';
+        card.innerHTML=`<div class="meal"><div class="time">${escapeHtml(m.time||'—')}</div><div><b>${escapeHtml(m.name||`Posiłek ${idx+1}`)}</b><ul class="clean">${(m.items||[]).filter(Boolean).map(x=>`<li>${escapeHtml(x)}</li>`).join('') || '<li>Brak składników</li>'}</ul></div></div>`;
+        meals.appendChild(card);
+      });
+    }
+  }
+}
+
+function renderDietEditor(){
+  if(!dietEditDraft) dietEditDraft=structuredClone(ensureDietShape(data.diet));
+  dietCalories.value=dietEditDraft.calories;
+  dietProtein.value=dietEditDraft.protein;
+  dietCarbs.value=dietEditDraft.carbs;
+  dietFat.value=dietEditDraft.fat;
+  dietGoalInput.value=dietEditDraft.goal;
+  dietMealsEditor.innerHTML='';
+  dietEditDraft.meals.forEach((m,idx)=>{
+    const div=document.createElement('div'); div.className='diet-meal-editor';
+    div.innerHTML=`
+      <div class="row between wrap">
+        <b>Posiłek ${idx+1}</b>
+        <button class="btn bad" data-remove-diet-meal="${idx}" style="padding:7px 9px">Usuń</button>
+      </div>
+      <div class="diet-editor-grid" style="margin-top:10px">
+        <div><label class="small">Godzina</label><input data-diet-time="${idx}" type="time" value="${escapeHtml(m.time)}"></div>
+        <div><label class="small">Nazwa</label><input data-diet-name="${idx}" type="text" value="${escapeHtml(m.name)}"></div>
+      </div>
+      <div style="margin-top:10px"><label class="small">Składniki — jeden na linię</label><textarea data-diet-items="${idx}">${escapeHtml((m.items||[]).join('\n'))}</textarea></div>`;
+    dietMealsEditor.appendChild(div);
+  });
+  dietMealsEditor.querySelectorAll('[data-remove-diet-meal]').forEach(btn=>btn.onclick=()=>{
+    syncDietEditorToDraft();
+    dietEditDraft.meals.splice(Number(btn.dataset.removeDietMeal),1);
+    renderDietEditor();
+  });
+}
+
+function syncDietEditorToDraft(){
+  if(!dietEditDraft) return;
+  dietEditDraft.calories=dietCalories.value.trim();
+  dietEditDraft.protein=dietProtein.value.trim();
+  dietEditDraft.carbs=dietCarbs.value.trim();
+  dietEditDraft.fat=dietFat.value.trim();
+  dietEditDraft.goal=dietGoalInput.value.trim();
+  dietEditDraft.meals=dietEditDraft.meals.map((m,idx)=>({
+    time:(document.querySelector(`[data-diet-time="${idx}"]`)?.value||'').trim(),
+    name:(document.querySelector(`[data-diet-name="${idx}"]`)?.value||`Posiłek ${idx+1}`).trim(),
+    items:(document.querySelector(`[data-diet-items="${idx}"]`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)
+  }));
+}
+
+function openDietEditor(){
+  dietEditDraft=structuredClone(ensureDietShape(data.diet));
+  dietEditorCard.style.display='block';
+  editDietBtn.style.display='none';
+  renderDietEditor();
+  dietEditorCard.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeDietEditor(){ dietEditDraft=null; dietEditorCard.style.display='none'; editDietBtn.style.display='inline-block'; }
+
+editDietBtn.onclick=openDietEditor;
+cancelDietBtn.onclick=()=>{ closeDietEditor(); };
+addDietMealBtn.onclick=()=>{
+  syncDietEditorToDraft();
+  dietEditDraft.meals.push({time:'',name:`Posiłek ${dietEditDraft.meals.length+1}`,items:[]});
+  renderDietEditor();
+};
+resetDietBtn.onclick=()=>{
+  if(confirm('Przywrócić bazową dietę?')){
+    dietEditDraft=structuredClone(DEFAULT_DIET);
+    renderDietEditor();
+  }
+};
+saveDietBtn.onclick=()=>{
+  syncDietEditorToDraft();
+  data.diet=ensureDietShape(dietEditDraft);
+  save();
+  closeDietEditor();
+  renderDiet();
+};
+
 function renderHistory(){
   const root=document.getElementById('historyList');
   const count=document.getElementById('historyCount');
@@ -860,6 +1026,7 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   if(t.dataset.view==='body') renderBody();
   if(t.dataset.view==='plan') renderPlanEditor();
   if(t.dataset.view==='history') renderHistory();
+  if(t.dataset.view==='diet') renderDiet();
 });
 
 
@@ -876,17 +1043,19 @@ importData.onchange=async e=>{
     if(!Array.isArray(data.workouts)) data.workouts=[];
     if(!Array.isArray(data.weights)) data.weights=[];
     if(!Array.isArray(data.measures)) data.measures=[];
+    data.diet=ensureDietShape(data.diet);
     save(); 
     draft={};
-    renderPlanEditor();renderBody();renderWorkout();renderHistory();alert('Dane zostały zaimportowane.'); 
+    renderPlanEditor();renderBody();renderWorkout();renderHistory();renderDiet();alert('Dane zostały zaimportowane.'); 
   }catch(err){alert('Nieprawidłowy plik JSON.');}
 };
-resetData.onclick=()=>{if(confirm('Na pewno usunąć wszystkie dane?')){data={workouts:[],weights:[],measures:[],plan:structuredClone(DEFAULT_PLAN)};save();draft={};renderWorkout();renderBody();renderPlanEditor();renderHistory();}};
+resetData.onclick=()=>{if(confirm('Na pewno usunąć wszystkie dane?')){data={workouts:[],weights:[],measures:[],plan:structuredClone(DEFAULT_PLAN),diet:structuredClone(DEFAULT_DIET)};save();draft={};renderWorkout();renderBody();renderPlanEditor();renderHistory();renderDiet();}};
 
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.style.display='inline-block';});
 installBtn.onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.style.display='none';};
 
+renderDiet();
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
 
 save();
