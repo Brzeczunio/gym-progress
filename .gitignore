@@ -1,0 +1,53 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
+*.vbproj.user
+*.vcxproj.user
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper.Caches/
+
+# VS Code / editors
+.vscode/
+*.swp
+*.swo
+
+# .NET build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+~$*
+
+# Local build / package artifacts
+node_modules/
+dist/
+build/
+.cache/
+
+# Archives created locally
+*.zip
+*.rar
+*.7z
+
+# Local environment files
+.env
+.env.*
+!.env.example
