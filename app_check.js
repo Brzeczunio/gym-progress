@@ -10,36 +10,33 @@ const DEFAULT_PLAN = {
     {id:'A7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie blisko tułowia.'}
   ],
   B: [
-    {id:'B1', category:'fly', name:'Ściąganie linek z góry w dół (high-to-low fly)', sets:2, min:12, max:15, step:2.5, note:'Nie cofaj barków zbyt głęboko za linię tułowia.'},
-    {id:'B2', category:'pulldown', name:'Ściąganie uchwytu neutralnego do klatki', sets:3, min:8, max:12, step:5, note:'Klatka uniesiona, bez bujania.'},
+    {id:'B1', category:'fly', name:'Ściąganie linek z góry w dół (high-to-low fly)', sets:2, min:12, max:15, step:2.5, note:'Ruch po łuku w dół i do środka; mocniej akcentuj dół klatki.'},
+    {id:'B2', category:'pulldown', name:'Ściąganie uchwytu neutralnego do klatki', sets:3, min:8, max:12, step:5, note:'Klatka uniesiona, łokcie w dół, bez bujania tułowiem.'},
     {id:'B3', category:'hipthrust', name:'Hip thrust', sets:4, min:8, max:12, step:5, note:'Pauza 1 s u góry, napnij pośladki.'},
     {id:'B4', category:'legext', name:'Prostowanie nóg na maszynie — obie nogi', sets:3, min:12, max:15, step:2.5, note:'Ruch płynny, bez „kopania” ciężaru.'},
-    {id:'B5', category:'rear', name:'Odwrotne rozpiętki z klatką opartą o ławkę', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
+    {id:'B5', category:'rear', name:'Odwrotne rozpiętki z klatką opartą o ławkę', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu; pracuje tylny bark.'},
     {id:'B6', category:'biceps', name:'Uginanie młotkowe', sets:3, min:10, max:15, step:2, note:'Nadgarstki neutralnie, bez bujania.'},
-    {id:'B7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie nieruchomo przy bokach.'},
-    {id:'B8', category:'press', name:'Chest press na maszynie — chwyt neutralny', sets:3, min:8, max:12, step:5, note:'Dodatkowa objętość na klatkę; barki nisko i łopatki stabilnie.'}
+    {id:'B7', category:'triceps', name:'Prostowanie ramion z liną', sets:2, min:10, max:15, step:2.5, note:'Łokcie nieruchomo przy bokach.'}
   ],
   C: [
-    {id:'C1', category:'press', name:'Wyciskanie hantli na podłodze, chwyt neutralny', sets:3, min:8, max:12, step:2, note:'Kontrolowane opuszczanie; bark nie wysuwa się do przodu.'},
-    {id:'C2', category:'fly', name:'Rozpiętki na wyciągu na wysokości klatki / lekko high-to-low', sets:2, min:12, max:15, step:2.5, note:'Lekko ugięte łokcie, bez wypychania barków.'},
-    {id:'C3', category:'row', name:'Wiosłowanie hantlami z klatką opartą o ławkę', sets:3, min:10, max:15, step:2, note:'Bez bujania tułowiem.'},
-    {id:'C4', category:'legcurl', name:'Uginanie nóg na maszynie', sets:3, min:10, max:15, step:2.5, note:'Pełna kontrola i pauza przy zgięciu.'},
-    {id:'C5', category:'hinge', name:'Cable pull-through', sets:3, min:10, max:15, step:5, note:'Biodra do tyłu, pośladki prowadzą ruch.'},
-    {id:'C6', category:'legext', name:'Prostowanie nóg na maszynie — jednonóż', sets:2, min:15, max:20, step:1.25, note:'Lekki ciężar, pełna kontrola.'},
-    {id:'C7', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
-    {id:'C8', category:'biceps', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Nadgarstki neutralne, bez bujania.'},
-    {id:'C9', category:'core', name:'Pallof press', sets:2, min:10, max:15, step:2.5, note:'Na stronę; brzuch napięty, bez rotacji tułowia.'}
+    {id:'C1', category:'press', name:'Chest press na maszynie — chwyt neutralny', sets:3, min:8, max:12, step:5, note:'Barki nisko, łopatki stabilnie, prowadź ruch klatką.'},
+    {id:'C2', category:'fly', name:'Ściąganie linek z góry w dół (high-to-low fly)', sets:2, min:12, max:15, step:2.5, note:'Akcent dół i środek klatki; bez wypychania barków do przodu.'},
+    {id:'C3', category:'hinge', name:'Cable pull-through', sets:3, min:10, max:15, step:5, note:'Biodra do tyłu, pośladki prowadzą ruch.'},
+    {id:'C4', category:'legext', name:'Prostowanie nóg na maszynie — jednonóż', sets:2, min:15, max:20, step:1.25, note:'Lekki ciężar, pełna kontrola i wyrównanie stron.'},
+    {id:'C5', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
+    {id:'C6', category:'rear', name:'Face pull z liną', sets:2, min:12, max:20, step:2.5, note:'Łokcie szeroko, lina w kierunku twarzy.'},
+    {id:'C7', category:'biceps', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Bez bujania, pełne dopięcie bicepsa.'}
   ]
 };
 
 
 const EXERCISE_IMAGES = {
-  A1:'eximg/db_flat_press.png', A2:'eximg/cable_fly.png', A3:'eximg/chest_supported_row.png', A4:'eximg/rdl_db.png', A5:'eximg/leg_extension.png', A6:'eximg/lateral_raise_cable.png', A7:'eximg/rope_pushdown.png',
-  B1:'eximg/cable_fly.png', B2:'eximg/lat_pulldown.png', B3:'eximg/hip_thrust.png', B4:'eximg/leg_extension.png', B5:'eximg/reverse_pec_deck.png', B6:'eximg/hammer_curl.png', B7:'eximg/rope_pushdown.png', B8:'eximg/chestpress_machine.png',
-  C1:'eximg/db_flat_press.png', C2:'eximg/cable_fly.png', C3:'eximg/chest_supported_row.png', C4:'eximg/leg_curl.png', C5:'eximg/rdl_db.png', C6:'eximg/single_leg_extension.png', C7:'eximg/lateral_raise_cable.png', C8:'eximg/hammer_curl.png', C9:'eximg/pallof_press.png'
+  A1:'eximg/db_flat_press.png', A2:'eximg/cable_fly.png', A3:'eximg/one_arm_row.png', A4:'eximg/rdl_db.png', A5:'eximg/leg_extension.png', A6:'eximg/lateral_raise_cable.png', A7:'eximg/rope_pushdown.png',
+  B1:'eximg/high_to_low_fly.png', B2:'eximg/neutral_pulldown_fixed.png', B3:'eximg/hip_thrust.png', B4:'eximg/leg_extension.png', B5:'eximg/reverse_fly_supported.png', B6:'eximg/hammer_curl.png', B7:'eximg/rope_pushdown.png',
+  C1:'eximg/chestpress_machine.png', C2:'eximg/high_to_low_fly.png', C3:'eximg/cable_pullthrough.png', C4:'eximg/single_leg_extension.png', C5:'eximg/lateral_raise_cable.png', C6:'eximg/face_pull.png', C7:'eximg/cable_curl.png'
 };
 const CATEGORY_IMAGES = {
-  press:'eximg/chestpress_machine.png', fly:'eximg/cable_fly.png', row:'eximg/seated_row.png', hinge:'eximg/rdl_db.png', hipthrust:'eximg/hip_thrust.png', legext:'eximg/leg_extension.png', legcurl:'eximg/leg_curl.png', latraise:'eximg/lateral_raise_cable.png', rear:'eximg/reverse_pec_deck.png', pulldown:'eximg/lat_pulldown.png', triceps:'eximg/rope_pushdown.png', biceps:'eximg/hammer_curl.png', abduction:'eximg/hip_thrust.png', calf:'eximg/seated_calf.png', core:'eximg/pallof_press.png'
+  press:'eximg/chestpress_machine.png', fly:'eximg/cable_fly.png', row:'eximg/seated_row.png', hinge:'eximg/rdl_db.png', hipthrust:'eximg/hip_thrust.png', legext:'eximg/leg_extension.png', legcurl:'eximg/leg_curl.png', latraise:'eximg/lateral_raise_cable.png', rear:'eximg/reverse_pec_deck.png', pulldown:'eximg/neutral_pulldown_fixed.png', triceps:'eximg/rope_pushdown.png', biceps:'eximg/hammer_curl.png', abduction:'eximg/hip_thrust.png', calf:'eximg/seated_calf.png', core:'eximg/pallof_press.png'
 };
 const IMAGE_BY_NAME = {
   'Chest press na maszynie — chwyt neutralny':'eximg/chestpress_machine.png',

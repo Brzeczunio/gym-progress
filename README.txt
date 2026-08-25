@@ -35,14 +35,18 @@ Wersja v20: grafiki z arkuszy zostały wycięte do osobnych plików PNG i bezpo�
 
 
 V26: poprawna grafika prostowania nóg na maszynie i twarde usuwanie wszystkich duplikatów prostowania nóg z Planu B. Paczka jest kompletna (grafiki, manifest, SW).
-Wersja v33: usunięto ręczny przycisk naprawy z Opcji; automatyczne twarde odświeżanie planu i grafik przy starcie pozostaje aktywne.
+Wersja v36: usunięto ręczny przycisk naprawy z Opcji; automatyczne twarde odświeżanie planu i grafik przy starcie pozostaje aktywne.
 
-Wersja v33: dodano .gitignore dla repozytorium GitHub Pages.
+Wersja v36: dodano .gitignore dla repozytorium GitHub Pages.
 
-Wersja v33: .gitignore rozszerzony o Visual Studio (.vs), Rider/JetBrains oraz pliki build .NET.
+Wersja v36: .gitignore rozszerzony o Visual Studio (.vs), Rider/JetBrains oraz pliki build .NET.
 
-Wersja v33: naprawiony błąd JS blokujący kliknięcia; przy każdym starcie twardo przywracany aktualny bazowy plan A/B/C i mapowanie grafik, z zachowaniem historii/pomiarów i własnych dodatkowych ćwiczeń.
+Wersja v36: naprawiony błąd JS blokujący kliknięcia; przy każdym starcie twardo przywracany aktualny bazowy plan A/B/C i mapowanie grafik, z zachowaniem historii/pomiarów i własnych dodatkowych ćwiczeń.
 
-Wersja v33: historia wagi i obwodów z usuwaniem wpisów; usunięto automatyczne wymuszanie planu/grafik. Grafiki używają cache-bustingu ?v=32, a service worker pobiera obrazy i nawigację network-first. Własne ćwiczenia i ich imageSrc nie są nadpisywane.
+Wersja v36: historia wagi i obwodów z usuwaniem wpisów; usunięto automatyczne wymuszanie planu/grafik. Grafiki używają cache-bustingu ?v=32, a service worker pobiera obrazy i nawigację network-first. Własne ćwiczenia i ich imageSrc nie są nadpisywane.
 
-Wersja v33: czyste wydanie bez migracji historycznych danych. Grafiki używają wyłącznie wersjonowania URL i cache service workera.
+Wersja v36: czyste wydanie bez migracji historycznych danych. Grafiki używają wyłącznie wersjonowania URL i cache service workera.
+
+Wersja v36: poprawiony plan C pod klatkę/barki/pośladki oraz nowa prawidłowa grafika ściągania uchwytu neutralnego do klatki.
+
+Wersja v36: czyste pierwsze wydanie z nowym planem jako DEFAULT_PLAN; bez migracji i napraw starych planów. Cache-busting pozostaje tylko dla grafik.
