@@ -259,7 +259,7 @@
       
       <div class="card">
         <h3>Wersja aplikacji</h3>
-        <div class="small"><b>Gym Progress v30</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
+        <div class="small"><b>Gym Progress v31</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
       </div>
 
       <div class="footer-note">To narzędzie do logowania treningu, nie diagnoza ani zastępstwo konsultacji medycznej.</div>
@@ -393,7 +393,7 @@ const IMAGE_BY_NAME = {
   'Wspięcia na palce siedząc':'eximg/seated_calf.png',
   'Pallof press':'eximg/pallof_press.png'
 };
-const IMAGE_ASSET_VERSION = '27';
+const IMAGE_ASSET_VERSION = '31';
 function versionedImageSrc(src){
   if(!src || src.startsWith('data:')) return src;
   return src + (src.includes('?') ? '&' : '?') + 'v=' + IMAGE_ASSET_VERSION;
@@ -627,6 +627,7 @@ function repairCanonicalPlanAndImages(){
 }
 
 migratePlanData();
+repairCanonicalPlanAndImages();
 forceImageMappings();
 save();
 
@@ -938,13 +939,6 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   if(t.dataset.view==='history') renderHistory();
 });
 
-  if(!confirm('Naprawić bazowy plan A/B/C i wymusić aktualne grafiki? Własne dodatkowe ćwiczenia zostaną zachowane.')) return;
-  repairCanonicalPlanAndImages();
-  draft={};
-  renderPlanEditor(); renderWorkout(); renderHistory();
-  const s=document.getElementById('repairStatus');
-  if(s){ s.textContent='✅ Plan naprawiony i grafiki odświeżone. Historia i pomiary pozostały bez zmian.'; s.style.color='#c9f6dc'; }
-};
 
 exportData.onclick=()=>{
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
