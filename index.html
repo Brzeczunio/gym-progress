@@ -243,8 +243,7 @@
           Importuj dane z JSON
           <input id="importData" type="file" accept="application/json" style="display:none">
         </label>
-        <button id="repairPlanImages" class="btn primary" style="width:100%;margin-top:8px">🛠️ Napraw plan i odśwież grafiki</button>
-        <div id="repairStatus" class="small" style="margin-top:7px">Przy starcie aplikacja automatycznie wymusza prawidłowe grafiki ćwiczeń.</div>
+<div id="repairStatus" class="small" style="margin-top:7px">Przy starcie aplikacja automatycznie wymusza prawidłowe grafiki ćwiczeń.</div>
         <button id="resetData" class="btn bad" style="width:100%;margin-top:8px">Wyczyść wszystkie dane</button>
       </div>
       <div class="card">
@@ -260,7 +259,7 @@
       
       <div class="card">
         <h3>Wersja aplikacji</h3>
-        <div class="small"><b>Gym Progress v27</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
+        <div class="small"><b>Gym Progress v28</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
       </div>
 
       <div class="footer-note">To narzędzie do logowania treningu, nie diagnoza ani zastępstwo konsultacji medycznej.</div>
@@ -939,7 +938,6 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   if(t.dataset.view==='history') renderHistory();
 });
 
-document.getElementById('repairPlanImages').onclick=()=>{
   if(!confirm('Naprawić bazowy plan A/B/C i wymusić aktualne grafiki? Własne dodatkowe ćwiczenia zostaną zachowane.')) return;
   repairCanonicalPlanAndImages();
   draft={};

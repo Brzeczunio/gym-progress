@@ -35,4 +35,5 @@ Wersja v20: grafiki z arkuszy zostały wycięte do osobnych plików PNG i bezpo�
 
 
 V26: poprawna grafika prostowania nóg na maszynie i twarde usuwanie wszystkich duplikatów prostowania nóg z Planu B. Paczka jest kompletna (grafiki, manifest, SW).
-\nV27: twarde wymuszanie mapowania grafik przy każdym starcie, cache-busting ?v=27, czyszczenie starych cache PWA oraz przycisk „Napraw plan i odśwież grafiki” w Opcjach. Przycisk przywraca aktualny bazowy A/B/C, zachowując własne dodatkowe ćwiczenia oraz historię/pomiary.\n
+\nV28: twarde wymuszanie mapowania grafik przy każdym starcie, cache-busting ?v=27, czyszczenie starych cache PWA oraz przycisk „Napraw plan i odśwież grafiki” w Opcjach. Przycisk przywraca aktualny bazowy A/B/C, zachowując własne dodatkowe ćwiczenia oraz historię/pomiary.\n
+Wersja v28: usunięto ręczny przycisk naprawy z Opcji; automatyczne twarde odświeżanie planu i grafik przy starcie pozostaje aktywne.
