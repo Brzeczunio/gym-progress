@@ -243,6 +243,8 @@
           Importuj dane z JSON
           <input id="importData" type="file" accept="application/json" style="display:none">
         </label>
+        <button id="repairPlanImages" class="btn primary" style="width:100%;margin-top:8px">🛠️ Napraw plan i odśwież grafiki</button>
+        <div id="repairStatus" class="small" style="margin-top:7px">Przy starcie aplikacja automatycznie wymusza prawidłowe grafiki ćwiczeń.</div>
         <button id="resetData" class="btn bad" style="width:100%;margin-top:8px">Wyczyść wszystkie dane</button>
       </div>
       <div class="card">
@@ -258,7 +260,7 @@
       
       <div class="card">
         <h3>Wersja aplikacji</h3>
-        <div class="small"><b>Gym Progress v25</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
+        <div class="small"><b>Gym Progress v27</b> — zweryfikowany Plan A/B, poprawione grafiki ćwiczeń, Historia i podstawianie ostatnich kg/powtórzeń/RIR.</div>
       </div>
 
       <div class="footer-note">To narzędzie do logowania treningu, nie diagnoza ani zastępstwo konsultacji medycznej.</div>
@@ -392,10 +394,16 @@ const IMAGE_BY_NAME = {
   'Wspięcia na palce siedząc':'eximg/seated_calf.png',
   'Pallof press':'eximg/pallof_press.png'
 };
+const IMAGE_ASSET_VERSION = '27';
+function versionedImageSrc(src){
+  if(!src || src.startsWith('data:')) return src;
+  return src + (src.includes('?') ? '&' : '?') + 'v=' + IMAGE_ASSET_VERSION;
+}
 function exerciseGraphicHTML(ex){
   const src = EXERCISE_IMAGES[ex.id] || IMAGE_BY_NAME[ex.name] || ex.imageSrc || CATEGORY_IMAGES[ex.category];
   if(src){
-    return `<img src="${src}" alt="${ex.name}" data-zoom="${src}">`;
+    const renderedSrc = versionedImageSrc(src);
+    return `<img src="${renderedSrc}" alt="${ex.name}" data-zoom="${renderedSrc}">`;
   }
   return graphicSVG(ex.category);
 }
@@ -523,20 +531,20 @@ function migratePlanData(){
     !/^Uginanie nóg/i.test(ex.name)
   );
 
-  // W dniu B ma zostać tylko JEDNO prostowanie nóg (B4).
-  let seenB4=false;
+  // W dniu B ma być DOKŁADNIE JEDNO prostowanie nóg.
+  // Starsze wersje mogły zapisać je pod innym ID lub nazwą z biblioteki,
+  // więc usuwamy wszystkie warianty. Kanoniczne B4 zostanie dodane poniżej z DEFAULT_PLAN.
+  const normalizeExerciseName = value => (value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
   data.plan.B = data.plan.B.filter(ex => {
-    const isB4 = ex.id==='B4' || ex.name==='Prostowanie nóg na maszynie — obie nogi';
-    if(isB4){
-      if(seenB4) return false;
-      seenB4=true;
-      ex.id='B4';
-      ex.category='legext';
-      ex.name='Prostowanie nóg na maszynie — obie nogi';
-      ex.sets=3; ex.min=12; ex.max=15; ex.step=2.5;
-      ex.note='Ruch płynny, bez „kopania” ciężaru.';
-    }
-    return true;
+    const n = normalizeExerciseName(ex.name);
+    const isAnyLegExtension =
+      ex.id === 'B4' ||
+      ex.category === 'legext' ||
+      n.includes('prostowanie nog');
+    return !isAnyLegExtension;
   });
   data.plan.C = data.plan.C.filter(ex => ex.id !== 'C9' && ex.name !== 'Pallof press');
 
@@ -550,10 +558,78 @@ function migratePlanData(){
     });
     data.plan[day].forEach(ex=>{ if(IMAGE_BY_NAME[ex.name]) ex.imageSrc=IMAGE_BY_NAME[ex.name]; });
   });
+
+  // Ostateczny bezpiecznik po migracji/importach: w B może zostać tylko jedno prostowanie nóg.
+  let bLegExtensionSeen = false;
+  data.plan.B = data.plan.B.filter(ex => {
+    const n = normalizeExerciseName(ex.name);
+    const isLegExt = ex.id === 'B4' || ex.category === 'legext' || n.includes('prostowanie nog');
+    if(!isLegExt) return true;
+    if(bLegExtensionSeen) return false;
+    bLegExtensionSeen = true;
+    ex.id = 'B4';
+    ex.category = 'legext';
+    ex.name = 'Prostowanie nóg na maszynie — obie nogi';
+    ex.sets = 3; ex.min = 12; ex.max = 15; ex.step = 2.5;
+    ex.note = 'Ruch płynny, bez „kopania” ciężaru.';
+    ex.imageSrc = 'eximg/leg_extension.png';
+    return true;
+  });
+  forceImageMappings();
+  save();
+}
+
+function forceImageMappings(){
+  if(!data.plan) return;
+  ['A','B','C'].forEach(day=>{
+    if(!Array.isArray(data.plan[day])) return;
+    data.plan[day].forEach(ex=>{
+      // ID bazowego ćwiczenia ma najwyższy priorytet — stare imageSrc nie może go nadpisać.
+      if(EXERCISE_IMAGES[ex.id]) ex.imageSrc = EXERCISE_IMAGES[ex.id];
+      else if(IMAGE_BY_NAME[ex.name]) ex.imageSrc = IMAGE_BY_NAME[ex.name];
+    });
+  });
+}
+
+function repairCanonicalPlanAndImages(){
+  if(!data.plan) data.plan = structuredClone(DEFAULT_PLAN);
+  const normName = value => (value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+  ['A','B','C'].forEach(day=>{
+    const current = normalizeDayPlan(data.plan[day] || []);
+    const defaults = DEFAULT_PLAN[day];
+    const defaultIds = new Set(defaults.map(x=>x.id));
+    const defaultNames = new Set(defaults.map(x=>normName(x.name)));
+
+    // Zachowaj własne dodatkowe ćwiczenia, ale usuń stare błędne wpisy z wcześniejszych wersji.
+    let custom = current.filter(ex => !defaultIds.has(ex.id) && !defaultNames.has(normName(ex.name)));
+    if(day==='B'){
+      custom = custom.filter(ex=>{
+        const n=normName(ex.name);
+        return ex.id!=='B8' &&
+          ex.category!=='legext' && ex.category!=='legcurl' &&
+          !n.includes('prostowanie nog') && !n.includes('uginanie nog') &&
+          !n.includes('chest press na maszynie');
+      });
+    }
+    if(day==='C') custom = custom.filter(ex => ex.id!=='C9' && normName(ex.name)!=='pallof press');
+
+    // Bazowy plan wraca dokładnie do aktualnej, zweryfikowanej wersji.
+    data.plan[day] = defaults.map(def=>({
+      ...structuredClone(def),
+      imageSrc: EXERCISE_IMAGES[def.id] || IMAGE_BY_NAME[def.name] || ''
+    })).concat(custom.map(ex=>({
+      ...ex,
+      imageSrc: IMAGE_BY_NAME[ex.name] || ex.imageSrc || ''
+    })));
+  });
+  forceImageMappings();
   save();
 }
 
 migratePlanData();
+forceImageMappings();
+save();
 
 function graphicSVG(cat){
   const base = (inner) => `<svg viewBox="0 0 120 120" width="110" height="110" xmlns="http://www.w3.org/2000/svg">
@@ -738,7 +814,7 @@ document.getElementById('addExerciseBtn').onclick=()=>{
   save(); renderPlanEditor(); renderWorkout();
 };
 document.getElementById('resetPlan').onclick=()=>{
-  if(confirm('Przywrócić domyślny plan?')){ data.plan=structuredClone(DEFAULT_PLAN); save(); draft={}; renderPlanEditor(); renderWorkout(); }
+  if(confirm('Przywrócić domyślny plan?')){ data.plan=structuredClone(DEFAULT_PLAN); forceImageMappings(); save(); draft={}; renderPlanEditor(); renderWorkout(); }
 };
 
 function renderBody(){
@@ -863,6 +939,15 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   if(t.dataset.view==='history') renderHistory();
 });
 
+document.getElementById('repairPlanImages').onclick=()=>{
+  if(!confirm('Naprawić bazowy plan A/B/C i wymusić aktualne grafiki? Własne dodatkowe ćwiczenia zostaną zachowane.')) return;
+  repairCanonicalPlanAndImages();
+  draft={};
+  renderPlanEditor(); renderWorkout(); renderHistory();
+  const s=document.getElementById('repairStatus');
+  if(s){ s.textContent='✅ Plan naprawiony i grafiki odświeżone. Historia i pomiary pozostały bez zmian.'; s.style.color='#c9f6dc'; }
+};
+
 exportData.onclick=()=>{
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='gym-progress-backup.json';a.click();URL.revokeObjectURL(url);
@@ -873,9 +958,11 @@ importData.onchange=async e=>{
     const parsed=JSON.parse(await f.text()); 
     data=parsed; 
     if(!data.plan) data.plan=structuredClone(DEFAULT_PLAN);
+    migratePlanData();
+    forceImageMappings();
     save(); 
     draft={};
-    renderPlanEditor();renderBody();renderWorkout();renderHistory();alert('Dane zaimportowane.'); 
+    renderPlanEditor();renderBody();renderWorkout();renderHistory();alert('Dane zaimportowane. Plan i grafiki zostały zweryfikowane.'); 
   }catch(err){alert('Nieprawidłowy plik JSON.');}
 };
 resetData.onclick=()=>{if(confirm('Na pewno usunąć wszystkie dane?')){data={workouts:[],weights:[],measures:[],plan:structuredClone(DEFAULT_PLAN)};save();draft={};renderWorkout();renderBody();renderPlanEditor();renderHistory();}};

@@ -26,21 +26,51 @@ const DEFAULT_PLAN = {
     {id:'C5', category:'hinge', name:'Cable pull-through', sets:3, min:10, max:15, step:5, note:'Biodra do tyłu, pośladki prowadzą ruch.'},
     {id:'C6', category:'legext', name:'Prostowanie nóg na maszynie — jednonóż', sets:2, min:15, max:20, step:1.25, note:'Lekki ciężar, pełna kontrola.'},
     {id:'C7', category:'latraise', name:'Unoszenie ramienia bokiem na wyciągu', sets:3, min:12, max:20, step:1, note:'Nie unoś barków do uszu.'},
-    {id:'C8', category:'biceps', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Nadgarstki neutralne, bez bujania.'}
+    {id:'C8', category:'biceps', name:'Uginanie ramion na wyciągu', sets:2, min:10, max:15, step:2.5, note:'Nadgarstki neutralne, bez bujania.'},
   ]
 };
 
 
 const EXERCISE_IMAGES = {
-  A1:'eximg/A1.png', A2:'eximg/A2.png', A3:'eximg/A3.png', A4:'eximg/A4.png', A5:'eximg/A5.png', A6:'eximg/A6.png',
-  B1:'eximg/B1.png', B2:'eximg/B2.png', B3:'eximg/B3.png', B4:'eximg/B4.png', B5:'eximg/B5.png', B6:'eximg/B6.png', B7:'eximg/B7.png',
-  C1:'eximg/C1.png', C2:'eximg/C2.png', C3:'eximg/C3.png', C4:'eximg/C4.png', C5:'eximg/C5.png', C6:'eximg/C6.png', C7:'eximg/C7.png', C8:'eximg/C8.png'
+  A1:'eximg/db_flat_press.png', A2:'eximg/cable_fly.png', A3:'eximg/one_arm_row.png', A4:'eximg/rdl_db.png', A5:'eximg/leg_extension.png', A6:'eximg/lateral_raise_cable.png', A7:'eximg/rope_pushdown.png',
+  B1:'eximg/high_to_low_fly.png', B2:'eximg/neutral_pulldown.png', B3:'eximg/hip_thrust.png', B4:'eximg/leg_extension.png', B5:'eximg/reverse_fly_supported.png', B6:'eximg/hammer_curl.png', B7:'eximg/rope_pushdown.png',
+  C1:'eximg/floor_press_neutral.png', C2:'eximg/cable_fly_c.png', C3:'eximg/chest_supported_row_c.png', C4:'eximg/leg_curl.png', C5:'eximg/cable_pullthrough.png', C6:'eximg/single_leg_extension.png', C7:'eximg/cable_lateral_raise.png', C8:'eximg/cable_curl.png'
 };
 const CATEGORY_IMAGES = {
-  press:'eximg/A1.png', fly:'eximg/C2.png', row:'eximg/C3.png', hinge:'eximg/A4.png', hipthrust:'eximg/B3.png', legext:'eximg/B4.png', legcurl:'eximg/C4.png', latraise:'eximg/C7.png', rear:'eximg/B5.png', pulldown:'eximg/B2.png', triceps:'eximg/B7.png', biceps:'eximg/B6.png', abduction:'eximg/B3.png', calf:'eximg/C6.png', core:'eximg/C5.png'
+  press:'eximg/chestpress_machine.png', fly:'eximg/cable_fly.png', row:'eximg/seated_row.png', hinge:'eximg/rdl_db.png', hipthrust:'eximg/hip_thrust.png', legext:'eximg/leg_extension.png', legcurl:'eximg/leg_curl.png', latraise:'eximg/lateral_raise_cable.png', rear:'eximg/reverse_pec_deck.png', pulldown:'eximg/lat_pulldown.png', triceps:'eximg/rope_pushdown.png', biceps:'eximg/hammer_curl.png', abduction:'eximg/hip_thrust.png', calf:'eximg/seated_calf.png', core:'eximg/pallof_press.png'
+};
+const IMAGE_BY_NAME = {
+  'Wyciskanie hantli na ławce płaskiej, chwyt półneutralny':'eximg/db_flat_press.png',
+  'Rozpiętki na wyciągu na wysokości klatki':'eximg/cable_fly.png',
+  'Wiosłowanie hantlem z podparciem':'eximg/one_arm_row.png',
+  'Martwy ciąg rumuński z hantlami':'eximg/rdl_db.png',
+  'Prostowanie nóg na maszynie — lekko':'eximg/leg_extension.png',
+  'Unoszenie ramienia bokiem na wyciągu':'eximg/lateral_raise_cable.png',
+  'Prostowanie ramion z liną':'eximg/rope_pushdown.png',
+  'Ściąganie linek z góry w dół (high-to-low fly)':'eximg/high_to_low_fly.png',
+  'Ściąganie uchwytu neutralnego do klatki':'eximg/neutral_pulldown.png',
+  'Hip thrust':'eximg/hip_thrust.png',
+  'Prostowanie nóg na maszynie — obie nogi':'eximg/leg_extension.png',
+  'Odwrotne rozpiętki z klatką opartą o ławkę':'eximg/reverse_fly_supported.png',
+  'Uginanie młotkowe':'eximg/hammer_curl.png',
+  'Wyciskanie hantli na podłodze, chwyt neutralny':'eximg/floor_press_neutral.png',
+  'Rozpiętki na wyciągu na wysokości klatki / lekko high-to-low':'eximg/cable_fly_c.png',
+  'Wiosłowanie hantlami z klatką opartą o ławkę':'eximg/chest_supported_row_c.png',
+  'Uginanie nóg na maszynie':'eximg/leg_curl.png',
+  'Cable pull-through':'eximg/cable_pullthrough.png',
+  'Prostowanie nóg na maszynie — jednonóż':'eximg/single_leg_extension.png',
+  'Uginanie ramion na wyciągu':'eximg/cable_curl.png',
+  'Chest press na maszynie — chwyt neutralny':'eximg/chestpress_machine.png',
+  'Reverse pec deck':'eximg/reverse_pec_deck.png',
+  'Face pull z liną':'eximg/face_pull.png',
+  'Wiosłowanie siedząc na wyciągu — neutralnie':'eximg/seated_row.png',
+  'Uginanie młotkowe hantli':'eximg/hammer_curl.png',
+  'Łydki siedząc na maszynie':'eximg/seated_calf.png',
+  'Wspięcia na palce siedząc':'eximg/seated_calf.png',
+  'Pallof press':'eximg/pallof_press.png'
 };
 function exerciseGraphicHTML(ex){
-  const src = ex.imageSrc || EXERCISE_IMAGES[ex.id] || CATEGORY_IMAGES[ex.category];
+  const src = EXERCISE_IMAGES[ex.id] || IMAGE_BY_NAME[ex.name] || ex.imageSrc || CATEGORY_IMAGES[ex.category];
   if(src){
     return `<img src="${src}" alt="${ex.name}" data-zoom="${src}">`;
   }
@@ -56,59 +86,29 @@ function closeModal(){ document.getElementById('imgModal').classList.remove('act
 
 
 const EXERCISE_LIBRARY = [
-  {name:'Wyciskanie hantli na ławce płaskiej', muscle:'Klatka', equipment:'Hantle', category:'press', imageSrc:'eximg/A1.png', sets:3,min:8,max:12,step:2,note:'Łopatki lekko ściągnięte; łokcie ok. 30–45°.'},
-  {name:'Wyciskanie hantli na podłodze', muscle:'Klatka', equipment:'Hantle', category:'press', imageSrc:'eximg/C1.png', sets:3,min:8,max:12,step:2,note:'Podłoga ogranicza głębokość i rozciągnięcie barku.'},
-  {name:'Chest press na maszynie — chwyt neutralny', muscle:'Klatka', equipment:'Maszyna', category:'press', imageSrc:'eximg/A1.png', sets:3,min:8,max:12,step:5,note:'Nie wysuwaj barków do przodu przy końcu serii.'},
-  {name:'Rozpiętki na wyciągu na wysokości klatki', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/A2.png', sets:2,min:12,max:15,step:2.5,note:'Lekko ugięte łokcie, kontrolowany zakres.'},
-  {name:'Rozpiętki high-to-low na wyciągu', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/B1.png', sets:2,min:12,max:15,step:2.5,note:'Dół i środek klatki; prowadź dłonie w dół i do środka.'},
-  {name:'Rozpiętki low-to-high na wyciągu', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/C2.png', sets:2,min:12,max:15,step:2.5,note:'Górna część klatki; nie unoś barków.'},
-  {name:'Pompki na uchwytach / podwyższeniu', muscle:'Klatka', equipment:'Masa ciała', category:'press', imageSrc:'eximg/C1.png', sets:3,min:8,max:15,step:1,note:'Dobierz wysokość tak, aby bark był spokojny.'},
-
-  {name:'Unoszenie ramienia bokiem na wyciągu', muscle:'Barki', equipment:'Wyciąg', category:'latraise', imageSrc:'eximg/C7.png', sets:3,min:12,max:20,step:1,note:'Nie unoś barków do uszu.'},
-  {name:'Unoszenie bokiem na maszynie', muscle:'Barki', equipment:'Maszyna', category:'latraise', imageSrc:'eximg/C7.png', sets:3,min:12,max:20,step:2.5,note:'Płynny ruch, bez szarpania.'},
-  {name:'Odwrotne rozpiętki z klatką opartą', muscle:'Barki', equipment:'Hantle', category:'rear', imageSrc:'eximg/B5.png', sets:3,min:12,max:20,step:1,note:'Tylny akton; bez unoszenia barków.'},
-  {name:'Reverse pec deck', muscle:'Barki', equipment:'Maszyna', category:'rear', imageSrc:'eximg/B5.png', sets:3,min:12,max:20,step:2.5,note:'Stabilny tułów, bez unoszenia barków do uszu.'},
-  {name:'Face pull z liną', muscle:'Barki', equipment:'Wyciąg', category:'rear', imageSrc:'eximg/B5.png', sets:2,min:12,max:20,step:2.5,note:'Lekko, kontrolowanie; lina w kierunku twarzy.'},
-
-  {name:'Ściąganie uchwytu neutralnego do klatki', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/B2.png', sets:3,min:8,max:12,step:5,note:'Bez bujania tułowiem.'},
-  {name:'Ściąganie drążka jednorącz', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/B2.png', sets:3,min:10,max:15,step:2.5,note:'Łokieć prowadź w dół, bez skręcania.'},
-  {name:'Wiosłowanie hantlem z podparciem', muscle:'Plecy', equipment:'Hantle', category:'row', imageSrc:'eximg/A3.png', sets:3,min:8,max:12,step:2,note:'Nie skręcaj tułowia.'},
-  {name:'Wiosłowanie hantlami z klatką opartą', muscle:'Plecy', equipment:'Hantle', category:'row', imageSrc:'eximg/C3.png', sets:3,min:10,max:15,step:2,note:'Klatka oparta, bez bujania.'},
-  {name:'Wiosłowanie siedząc na wyciągu — neutralnie', muscle:'Plecy', equipment:'Wyciąg', category:'row', imageSrc:'eximg/C3.png', sets:3,min:8,max:12,step:5,note:'Nie odchylaj mocno tułowia.'},
-  {name:'Wiosłowanie na maszynie z podparciem klatki', muscle:'Plecy', equipment:'Maszyna', category:'row', imageSrc:'eximg/C3.png', sets:3,min:8,max:12,step:5,note:'Stabilny tułów, łokcie prowadzą ruch.'},
-  {name:'Straight-arm pulldown', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/B2.png', sets:2,min:12,max:15,step:2.5,note:'Ramiona prawie proste, ruch z barku.'},
-
-  {name:'Uginanie młotkowe hantli', muscle:'Biceps', equipment:'Hantle', category:'biceps', imageSrc:'eximg/B6.png', sets:3,min:10,max:15,step:2,note:'Nadgarstki neutralnie.'},
-  {name:'Uginanie ramion na wyciągu', muscle:'Biceps', equipment:'Wyciąg', category:'biceps', imageSrc:'eximg/C8.png', sets:2,min:10,max:15,step:2.5,note:'Bez bujania tułowiem.'},
-  {name:'Uginanie na modlitewniku — maszyna', muscle:'Biceps', equipment:'Maszyna', category:'biceps', imageSrc:'eximg/B6.png', sets:2,min:10,max:15,step:2.5,note:'Pełna kontrola, nie odbijaj na dole.'},
-  {name:'Uginanie hantli siedząc', muscle:'Biceps', equipment:'Hantle', category:'biceps', imageSrc:'eximg/B6.png', sets:2,min:10,max:15,step:2,note:'Nie cofaj barków agresywnie.'},
-
-  {name:'Prostowanie ramion z liną', muscle:'Triceps', equipment:'Wyciąg', category:'triceps', imageSrc:'eximg/B7.png', sets:2,min:10,max:15,step:2.5,note:'Łokcie nieruchomo przy tułowiu.'},
-  {name:'Prostowanie jednorącz na wyciągu', muscle:'Triceps', equipment:'Wyciąg', category:'triceps', imageSrc:'eximg/B7.png', sets:2,min:10,max:15,step:1.25,note:'Lekki ciężar, pełna kontrola.'},
-  {name:'Prostowanie na maszynie triceps', muscle:'Triceps', equipment:'Maszyna', category:'triceps', imageSrc:'eximg/B7.png', sets:2,min:10,max:15,step:2.5,note:'Nie unoś barków do uszu.'},
-
-  {name:'Hip thrust', muscle:'Pośladki', equipment:'Maszyna', category:'hipthrust', imageSrc:'eximg/B3.png', sets:4,min:8,max:12,step:5,note:'Pauza 1 s u góry, napnij pośladki.'},
-  {name:'Glute bridge na maszynie', muscle:'Pośladki', equipment:'Maszyna', category:'hipthrust', imageSrc:'eximg/B3.png', sets:3,min:10,max:15,step:5,note:'Nie przeprostowuj lędźwi.'},
-  {name:'Cable pull-through', muscle:'Pośladki', equipment:'Wyciąg', category:'hinge', imageSrc:'eximg/C5.png', sets:3,min:10,max:15,step:5,note:'Biodra do tyłu, pośladki prowadzą ruch.'},
-  {name:'Martwy ciąg rumuński z hantlami', muscle:'Pośladki', equipment:'Hantle', category:'hinge', imageSrc:'eximg/A4.png', sets:3,min:8,max:10,step:2,note:'Plecy neutralne, biodra do tyłu.'},
-  {name:'Odwodzenie nóg na maszynie', muscle:'Pośladki', equipment:'Maszyna', category:'abduction', imageSrc:'eximg/B3.png', sets:3,min:15,max:20,step:2.5,note:'Bez odbijania ciężaru.'},
-  {name:'Odwodzenie nogi na wyciągu', muscle:'Pośladki', equipment:'Wyciąg', category:'abduction', imageSrc:'eximg/B3.png', sets:3,min:15,max:20,step:1.25,note:'Stabilny tułów, mały kontrolowany ruch.'},
-
-  {name:'Prostowanie nóg na maszynie — obie nogi', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/B4.png', sets:3,min:12,max:15,step:2.5,note:'Płynnie, bez kopania ciężaru.'},
-  {name:'Prostowanie nóg na maszynie — jednonóż', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/C6.png', sets:2,min:15,max:20,step:1.25,note:'Lekko i kontrolowanie.'},
-  {name:'Izometryczne prostowanie kolana na maszynie', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/B4.png', sets:3,min:20,max:40,step:1.25,note:'Czas w sekundach; lekki opór.'},
-
-  {name:'Uginanie nóg siedząc', muscle:'Tył uda', equipment:'Maszyna', category:'legcurl', imageSrc:'eximg/C4.png', sets:3,min:10,max:15,step:2.5,note:'Kontrola i pauza przy zgięciu.'},
-  {name:'Uginanie nóg leżąc', muscle:'Tył uda', equipment:'Maszyna', category:'legcurl', imageSrc:'eximg/C4.png', sets:3,min:10,max:15,step:2.5,note:'Nie odrywaj bioder.'},
-  {name:'Martwy ciąg rumuński z hantlami — tył uda', muscle:'Tył uda', equipment:'Hantle', category:'hinge', imageSrc:'eximg/A4.png', sets:3,min:8,max:10,step:2,note:'Biodra do tyłu, plecy neutralne.'},
-
-  {name:'Wspięcia na palce siedząc', muscle:'Łydki', equipment:'Maszyna', category:'calf', imageSrc:'eximg/C6.png', sets:3,min:12,max:20,step:5,note:'Pauza u góry i pełna kontrola.'},
-  {name:'Wspięcia na palce stojąc na maszynie', muscle:'Łydki', equipment:'Maszyna', category:'calf', imageSrc:'eximg/C6.png', sets:3,min:12,max:20,step:5,note:'Nie odbijaj z dołu.'},
-
-  {name:'Pallof press', muscle:'Core', equipment:'Wyciąg', category:'core', imageSrc:'eximg/C5.png', sets:2,min:10,max:15,step:2.5,note:'Nie pozwól tułowiowi obracać się.'},
-  {name:'Dead bug', muscle:'Core', equipment:'Masa ciała', category:'core', imageSrc:'eximg/C5.png', sets:2,min:8,max:12,step:1,note:'Lędźwie stabilnie, ruch powoli.'},
-  {name:'Deska bokiem', muscle:'Core', equipment:'Masa ciała', category:'core', imageSrc:'eximg/C5.png', sets:2,min:20,max:40,step:1,note:'Czas w sekundach; ciało w jednej linii.'},
-  {name:'Cable crunch', muscle:'Core', equipment:'Wyciąg', category:'core', imageSrc:'eximg/C5.png', sets:2,min:10,max:15,step:2.5,note:'Zginaj tułów, nie ciągnij rękami.'}
+  {name:'Wyciskanie hantli na ławce płaskiej, chwyt półneutralny', muscle:'Klatka', equipment:'Hantle', category:'press', imageSrc:'eximg/db_flat_press.png', sets:3,min:8,max:12,step:2,note:'Łopatki stabilnie; łokcie 30–45°.'},
+  {name:'Chest press na maszynie — chwyt neutralny', muscle:'Klatka', equipment:'Maszyna', category:'press', imageSrc:'eximg/chestpress_machine.png', sets:3,min:8,max:12,step:5,note:'Barki nisko, bez wysuwania ich do przodu.'},
+  {name:'Rozpiętki na wyciągu na wysokości klatki', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/cable_fly.png', sets:2,min:12,max:15,step:2.5,note:'Kontrolowany zakres.'},
+  {name:'Ściąganie linek z góry w dół (high-to-low fly)', muscle:'Klatka', equipment:'Wyciąg', category:'fly', imageSrc:'eximg/high_to_low_fly.png', sets:2,min:12,max:15,step:2.5,note:'Prowadź dłonie w dół i do środka.'},
+  {name:'Wiosłowanie hantlem z podparciem', muscle:'Plecy', equipment:'Hantle', category:'row', imageSrc:'eximg/one_arm_row.png', sets:3,min:8,max:12,step:2,note:'Nie skręcaj tułowia.'},
+  {name:'Wiosłowanie hantlami z klatką opartą o ławkę', muscle:'Plecy', equipment:'Hantle', category:'row', imageSrc:'eximg/chest_supported_row_c.png', sets:3,min:10,max:15,step:2,note:'Bez bujania tułowiem.'},
+  {name:'Wiosłowanie siedząc na wyciągu — neutralnie', muscle:'Plecy', equipment:'Wyciąg', category:'row', imageSrc:'eximg/seated_row.png', sets:3,min:8,max:12,step:5,note:'Nie odchylaj mocno tułowia.'},
+  {name:'Ściąganie uchwytu neutralnego do klatki', muscle:'Plecy', equipment:'Wyciąg', category:'pulldown', imageSrc:'eximg/neutral_pulldown.png', sets:3,min:8,max:12,step:5,note:'Bez bujania.'},
+  {name:'Unoszenie ramienia bokiem na wyciągu', muscle:'Barki', equipment:'Wyciąg', category:'latraise', imageSrc:'eximg/lateral_raise_cable.png', sets:3,min:12,max:20,step:1,note:'Nie unoś barków do uszu.'},
+  {name:'Odwrotne rozpiętki z klatką opartą o ławkę', muscle:'Barki', equipment:'Hantle', category:'rear', imageSrc:'eximg/reverse_fly_supported.png', sets:3,min:12,max:20,step:1,note:'Tylny akton, bez szarpania.'},
+  {name:'Reverse pec deck', muscle:'Barki', equipment:'Maszyna', category:'rear', imageSrc:'eximg/reverse_pec_deck.png', sets:3,min:12,max:20,step:2.5,note:'Stabilny tułów.'},
+  {name:'Face pull z liną', muscle:'Barki', equipment:'Wyciąg', category:'rear', imageSrc:'eximg/face_pull.png', sets:2,min:12,max:20,step:2.5,note:'Lina w kierunku twarzy.'},
+  {name:'Uginanie młotkowe', muscle:'Biceps', equipment:'Hantle', category:'biceps', imageSrc:'eximg/hammer_curl.png', sets:3,min:10,max:15,step:2,note:'Nadgarstki neutralnie.'},
+  {name:'Uginanie ramion na wyciągu', muscle:'Biceps', equipment:'Wyciąg', category:'biceps', imageSrc:'eximg/cable_curl.png', sets:2,min:10,max:15,step:2.5,note:'Bez bujania.'},
+  {name:'Prostowanie ramion z liną', muscle:'Triceps', equipment:'Wyciąg', category:'triceps', imageSrc:'eximg/rope_pushdown.png', sets:2,min:10,max:15,step:2.5,note:'Łokcie nieruchomo przy tułowiu.'},
+  {name:'Hip thrust', muscle:'Pośladki', equipment:'Maszyna', category:'hipthrust', imageSrc:'eximg/hip_thrust.png', sets:4,min:8,max:12,step:5,note:'Pauza u góry.'},
+  {name:'Cable pull-through', muscle:'Pośladki', equipment:'Wyciąg', category:'hinge', imageSrc:'eximg/cable_pullthrough.png', sets:3,min:10,max:15,step:5,note:'Biodra do tyłu, pośladki prowadzą ruch.'},
+  {name:'Martwy ciąg rumuński z hantlami', muscle:'Tył uda', equipment:'Hantle', category:'hinge', imageSrc:'eximg/rdl_db.png', sets:3,min:8,max:10,step:2,note:'Plecy neutralne.'},
+  {name:'Prostowanie nóg na maszynie — obie nogi', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/leg_extension.png', sets:3,min:12,max:15,step:2.5,note:'Kontrolowany ruch.'},
+  {name:'Prostowanie nóg na maszynie — jednonóż', muscle:'Czworogłowe', equipment:'Maszyna', category:'legext', imageSrc:'eximg/single_leg_extension.png', sets:2,min:15,max:20,step:1.25,note:'Lekko i kontrolowanie.'},
+  {name:'Uginanie nóg na maszynie', muscle:'Tył uda', equipment:'Maszyna', category:'legcurl', imageSrc:'eximg/leg_curl.png', sets:3,min:10,max:15,step:2.5,note:'Pełna kontrola.'},
+  {name:'Łydki siedząc na maszynie', muscle:'Łydki', equipment:'Maszyna', category:'calf', imageSrc:'eximg/seated_calf.png', sets:3,min:12,max:20,step:5,note:'Pauza u góry.'},
+  {name:'Pallof press', muscle:'Core', equipment:'Wyciąg', category:'core', imageSrc:'eximg/pallof_press.png', sets:2,min:10,max:15,step:2.5,note:'Bez rotacji tułowia.'}
 ];
 
 function openLibrary(){
@@ -183,9 +183,71 @@ function normalizeDayPlan(dayArr){
     min: Number(x.min)||8,
     max: Number(x.max)||12,
     step: Number(x.step)||2,
-    note: x.note || ''
+    note: x.note || '',
+    imageSrc: IMAGE_BY_NAME[x.name] || x.imageSrc || ''
   }));
 }
+
+function migratePlanData(){
+  if(!data.plan){ data.plan = structuredClone(DEFAULT_PLAN); return; }
+  ['A','B','C'].forEach(day=>{ data.plan[day] = normalizeDayPlan(data.plan[day] || []); });
+
+  // Usuń błędne pozycje dodane przez starsze wersje aplikacji.
+  data.plan.B = data.plan.B.filter(ex =>
+    ex.id !== 'B8' &&
+    ex.name !== 'Chest press na maszynie — chwyt neutralny' &&
+    ex.category !== 'legcurl' &&
+    !/^Uginanie nóg/i.test(ex.name)
+  );
+
+  // W dniu B ma być DOKŁADNIE JEDNO prostowanie nóg.
+  // Starsze wersje mogły zapisać je pod innym ID lub nazwą z biblioteki,
+  // więc usuwamy wszystkie warianty. Kanoniczne B4 zostanie dodane poniżej z DEFAULT_PLAN.
+  const normalizeExerciseName = value => (value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  data.plan.B = data.plan.B.filter(ex => {
+    const n = normalizeExerciseName(ex.name);
+    const isAnyLegExtension =
+      ex.id === 'B4' ||
+      ex.category === 'legext' ||
+      n.includes('prostowanie nog');
+    return !isAnyLegExtension;
+  });
+  data.plan.C = data.plan.C.filter(ex => ex.id !== 'C9' && ex.name !== 'Pallof press');
+
+  // Uzupełnij brakujące ćwiczenia bazowego planu, ale nie dodawaj duplikatów.
+  ['A','B','C'].forEach(day=>{
+    const ids=new Set(data.plan[day].map(x=>x.id));
+    DEFAULT_PLAN[day].forEach(def=>{ if(!ids.has(def.id)) data.plan[day].push(structuredClone(def)); });
+    data.plan[day].sort((a,b)=>{
+      const ai=DEFAULT_PLAN[day].findIndex(x=>x.id===a.id), bi=DEFAULT_PLAN[day].findIndex(x=>x.id===b.id);
+      if(ai<0&&bi<0) return 0; if(ai<0) return 1; if(bi<0) return -1; return ai-bi;
+    });
+    data.plan[day].forEach(ex=>{ if(IMAGE_BY_NAME[ex.name]) ex.imageSrc=IMAGE_BY_NAME[ex.name]; });
+  });
+
+  // Ostateczny bezpiecznik po migracji/importach: w B może zostać tylko jedno prostowanie nóg.
+  let bLegExtensionSeen = false;
+  data.plan.B = data.plan.B.filter(ex => {
+    const n = normalizeExerciseName(ex.name);
+    const isLegExt = ex.id === 'B4' || ex.category === 'legext' || n.includes('prostowanie nog');
+    if(!isLegExt) return true;
+    if(bLegExtensionSeen) return false;
+    bLegExtensionSeen = true;
+    ex.id = 'B4';
+    ex.category = 'legext';
+    ex.name = 'Prostowanie nóg na maszynie — obie nogi';
+    ex.sets = 3; ex.min = 12; ex.max = 15; ex.step = 2.5;
+    ex.note = 'Ruch płynny, bez „kopania” ciężaru.';
+    ex.imageSrc = 'eximg/leg_extension.png';
+    return true;
+  });
+  save();
+}
+
+migratePlanData();
 
 function graphicSVG(cat){
   const base = (inner) => `<svg viewBox="0 0 120 120" width="110" height="110" xmlns="http://www.w3.org/2000/svg">
@@ -252,7 +314,7 @@ function renderWorkout(){
     wrap.innerHTML = `<div class="exercise-top">
         <div class="ex-graphic">${exerciseGraphicHTML(ex)}</div>
         <div><div class="ex-title">${idx+1}. ${ex.name}</div><div class="ex-meta">${ex.sets} × ${ex.min}–${ex.max} • ${ex.note}</div><div class="zoom-hint">Stuknij obrazek, aby powiększyć.</div>
-        <div class="tiny" style="margin-top:7px">${lastTxt}</div><div class="last-fill">Domyślnie podstawione są ostatnie serie / kg / RIR z poprzedniego treningu tego samego dnia planu.</div></div>
+        <div class="tiny" style="margin-top:7px">${lastTxt}</div><div class="last-fill">Aplikacja podstawia ostatnie serie, kg i RIR z poprzedniego treningu tego samego dnia planu.</div></div>
       </div>
       <div class="set-grid head"><div>Seria</div><div>kg</div><div>Powt.</div><div>RIR</div></div>${rows}
       <div id="status_${dkey}" class="status warn">Wpisz serie, aby zobaczyć sugestię progresji.</div>`;
@@ -319,7 +381,7 @@ function renderPlanEditor(){
         <button class="btn bad" data-remove="${ex.id}" style="padding:8px 10px">Usuń</button>
       </div>
       <div class="editor-preview" style="margin-bottom:10px">
-        <div class="ex-graphic" style="width:120px;height:120px">${exerciseGraphicHTML(ex)}</div>
+        <div class="ex-graphic" style="width:132px;height:132px">${exerciseGraphicHTML(ex)}</div>
         <div style="flex:1">
           <label class="tiny">Nazwa</label>
           <input data-field="name" data-id="${ex.id}" value="${escapeHtml(ex.name)}">
