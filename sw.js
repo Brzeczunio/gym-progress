@@ -1,4 +1,4 @@
-const CACHE='gym-progress-v31';
+const CACHE='gym-progress-v32';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(
   caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())
@@ -9,7 +9,17 @@ self.addEventListener('activate',e=>e.waitUntil(
     .then(()=>self.clients.claim())
 ));
 self.addEventListener('fetch',e=>{
-  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{
-    const copy=resp.clone(); caches.open(CACHE).then(c=>c.put(e.request,copy)); return resp;
+  const req=e.request;
+  const url=new URL(req.url);
+  const isImage=req.destination==='image' || url.pathname.includes('/eximg/');
+  const isNav=req.mode==='navigate';
+  if(isImage || isNav){
+    e.respondWith(fetch(req).then(resp=>{
+      const copy=resp.clone(); caches.open(CACHE).then(c=>c.put(req,copy)); return resp;
+    }).catch(()=>caches.match(req).then(r=>r || (isNav?caches.match('./index.html'):undefined))));
+    return;
+  }
+  e.respondWith(caches.match(req).then(r=>r||fetch(req).then(resp=>{
+    const copy=resp.clone(); caches.open(CACHE).then(c=>c.put(req,copy)); return resp;
   }).catch(()=>caches.match('./index.html'))));
 });

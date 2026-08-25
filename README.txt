@@ -35,11 +35,13 @@ Wersja v20: grafiki z arkuszy zostały wycięte do osobnych plików PNG i bezpo�
 
 
 V26: poprawna grafika prostowania nóg na maszynie i twarde usuwanie wszystkich duplikatów prostowania nóg z Planu B. Paczka jest kompletna (grafiki, manifest, SW).
-\nV31: twarde wymuszanie mapowania grafik przy każdym starcie, cache-busting ?v=27, czyszczenie starych cache PWA oraz przycisk „Napraw plan i odśwież grafiki” w Opcjach. Przycisk przywraca aktualny bazowy A/B/C, zachowując własne dodatkowe ćwiczenia oraz historię/pomiary.\n
-Wersja v31: usunięto ręczny przycisk naprawy z Opcji; automatyczne twarde odświeżanie planu i grafik przy starcie pozostaje aktywne.
+\nV32: twarde wymuszanie mapowania grafik przy każdym starcie, cache-busting ?v=27, czyszczenie starych cache PWA oraz przycisk „Napraw plan i odśwież grafiki” w Opcjach. Przycisk przywraca aktualny bazowy A/B/C, zachowując własne dodatkowe ćwiczenia oraz historię/pomiary.\n
+Wersja v32: usunięto ręczny przycisk naprawy z Opcji; automatyczne twarde odświeżanie planu i grafik przy starcie pozostaje aktywne.
 
-Wersja v31: dodano .gitignore dla repozytorium GitHub Pages.
+Wersja v32: dodano .gitignore dla repozytorium GitHub Pages.
 
-Wersja v31: .gitignore rozszerzony o Visual Studio (.vs), Rider/JetBrains oraz pliki build .NET.
+Wersja v32: .gitignore rozszerzony o Visual Studio (.vs), Rider/JetBrains oraz pliki build .NET.
 
-Wersja v31: naprawiony błąd JS blokujący kliknięcia; przy każdym starcie twardo przywracany aktualny bazowy plan A/B/C i mapowanie grafik, z zachowaniem historii/pomiarów i własnych dodatkowych ćwiczeń.
+Wersja v32: naprawiony błąd JS blokujący kliknięcia; przy każdym starcie twardo przywracany aktualny bazowy plan A/B/C i mapowanie grafik, z zachowaniem historii/pomiarów i własnych dodatkowych ćwiczeń.
+
+Wersja v32: historia wagi i obwodów z usuwaniem wpisów; usunięto automatyczne wymuszanie planu/grafik. Grafiki używają cache-bustingu ?v=32, a service worker pobiera obrazy i nawigację network-first. Własne ćwiczenia i ich imageSrc nie są nadpisywane.
